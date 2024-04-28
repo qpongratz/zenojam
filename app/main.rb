@@ -1,12 +1,15 @@
+require 'app/brick'
 def tick args
+  args.state.bricks_left ||= 1000000000
   args.state.paddle ||= { x: 100, y: 100, w: 120, h: 10, r: 0, g: 0, b: 0 }
 
-  args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, r: 0, g: 0, b: 255 }
+  args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/circle/orange.png' }
 
   args.state.bricks ||= []
   if args.state.tick_count == 0 || args.state.bricks.empty?
     20.times do |i|
-      args.state.bricks << { x: 50 + (i * 60), y: 600, w: 50, h: 20, r: 255, g: 0, b: 0 }
+      x = 50 + (i * 60)
+      args.state.bricks << Brick.new(x: x, y: 600, w: 50, h: 20 )
     end
   end
 
@@ -37,6 +40,7 @@ def tick args
   args.state.bricks.each_with_index do |brick, index|
     next unless args.state.ball.intersect_rect? brick
     args.state.bricks.delete_at index
+    args.state.bricks_left -= 1
     args.state.ball_y_direction *= -1
   end
 
@@ -44,9 +48,10 @@ def tick args
   move_ball args
 
 
-  args.outputs.solids << args.state.bricks
+  args.outputs.labels << [640, 700, "Bricks left: #{args.state.bricks_left}", 5, 1, 255, 255, 255]
+  args.outputs.sprites << args.state.bricks
   args.outputs.solids << args.state.paddle
-  args.outputs.solids << args.state.ball
+  args.outputs.sprites << args.state.ball
 end
 
 def move_ball args
@@ -64,7 +69,6 @@ end
 def calculate_new_ball_position args
   args.state.new_ball_x = (args.state.ball.x + (args.state.ball_x_direction * args.state.ball_speed))
   args.state.new_ball_y = (args.state.ball.y + (args.state.ball_y_direction * args.state.ball_speed))
-
 end
 
 $gtk.reset
