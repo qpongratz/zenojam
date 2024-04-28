@@ -3,6 +3,13 @@ def tick args
 
   args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, r: 0, g: 0, b: 255 }
 
+  args.state.bricks ||= []
+  if args.state.tick_count == 0 || args.state.bricks.empty?
+    20.times do |i|
+      args.state.bricks << { x: 50 + (i * 60), y: 600, w: 50, h: 20, r: 255, g: 0, b: 0 }
+    end
+  end
+
   args.state.ball_speed ||= 5
   args.state.ball_x_direction ||= -1
   args.state.ball_y_direction ||= -1
@@ -27,10 +34,17 @@ def tick args
     args.state.ball_y_direction *= -1
   end
 
+  args.state.bricks.each_with_index do |brick, index|
+    next unless args.state.ball.intersect_rect? brick
+    args.state.bricks.delete_at index
+    args.state.ball_y_direction *= -1
+  end
+
   calculate_new_ball_position args
   move_ball args
 
 
+  args.outputs.solids << args.state.bricks
   args.outputs.solids << args.state.paddle
   args.outputs.solids << args.state.ball
 end
