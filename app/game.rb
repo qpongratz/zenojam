@@ -2,16 +2,23 @@ require 'app/brick'
 
 class Game
   def game args
+    args.state.ball_damage ||= 1
     args.state.bricks_left ||= 1000000000
     args.state.paddle ||= { x: 100, y: 100, w: 120, h: 10, r: 0, g: 0, b: 0 }
 
     args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/circle/orange.png' }
 
+
     args.state.bricks ||= []
     if args.state.tick_count == 0 || args.state.bricks.empty?
-      20.times do |i|
-        x = 50 + (i * 60)
-        args.state.bricks << Brick.new(x: x, y: 600, w: 50, h: 20 )
+      10.times do |j|
+        20.times do |i|
+          break if args.state.bricks.length >= 30
+          x = 50 + (i * 60)
+          y = 650 - (j * 30)
+          next if rand(2) == 0
+          args.state.bricks << Brick.new(x: x, y: y, w: 50, h: 20, health: (rand(7) + 1) )
+        end
       end
     end
 
@@ -31,17 +38,18 @@ class Game
       calculate_new_ball_position args
     end
 
-    if args.state.new_ball_x < 0 || args.state.new_ball_x > 1280 - 20
+    if args.state.new_ball_x < 0 || args.state.new_ball_x > 1280 - 10
       args.state.ball_x_direction *= -1
     end
 
-    if args.state.new_ball_y < 0 || args.state.new_ball_y > 720 - 20
+    if args.state.new_ball_y < 0 || args.state.new_ball_y > 720 - 10
       args.state.ball_y_direction *= -1
     end
 
     args.state.bricks.each_with_index do |brick, index|
       next unless args.state.ball.intersect_rect? brick
-      args.state.bricks.delete_at index
+      brick.take_damage(args.state.ball_damage)
+      args.state.bricks.delete_at index if brick.health <= 0
       args.state.bricks_left -= 1
       args.state.ball_y_direction *= -1
     end
