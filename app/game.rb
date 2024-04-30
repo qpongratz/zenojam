@@ -2,6 +2,10 @@ require 'app/brick'
 
 class Game
   def game args
+    args.state.ball_speed ||= 5
+    args.state.ball_x_direction ||= -1
+    args.state.ball_y_direction ||= -1
+    args.state.max_ball_direction ||= Math.sqrt(args.state.ball_x_direction ** 2 + args.state.ball_y_direction ** 2)
     args.state.ball_damage ||= 1
     args.state.bricks_left ||= 1000000000
     args.state.brick_width ||= 50
@@ -25,9 +29,6 @@ class Game
       end
     end
 
-    args.state.ball_speed ||= 5
-    args.state.ball_x_direction ||= -1
-    args.state.ball_y_direction ||= -1
 
     if args.inputs.keyboard.left && args.state.paddle.x > 4
       args.state.paddle.x -= 10
@@ -36,8 +37,7 @@ class Game
     end
 
     if args.state.ball.intersect_rect? args.state.paddle
-      args.state.ball_y_direction *= -1
-      calculate_new_ball_position args
+      modify_ball_direction args
     end
 
     if args.state.new_ball_x < 0 || args.state.new_ball_x > 1280 - 10
@@ -94,13 +94,16 @@ class Game
     args.state.ball.y = args.state.new_ball_y
   end
 
-  def reset_ball args
-    args.state.ball.x = args.state.old_ball_x
-    args.state.ball.y = args.state.old_ball_y
-  end
-
   def calculate_new_ball_position args
     args.state.new_ball_x = (args.state.ball.x + (args.state.ball_x_direction * args.state.ball_speed))
     args.state.new_ball_y = (args.state.ball.y + (args.state.ball_y_direction * args.state.ball_speed))
+  end
+
+  def modify_ball_direction args
+    ball_center_x = args.state.ball.x + (args.state.ball.w / 2)
+    paddle_center_x = args.state.paddle.x + (args.state.paddle.w / 2)
+    pos_x = (ball_center_x - paddle_center_x) / (args.state.paddle.w / 2)
+    args.state.ball_x_direction = args.state.max_ball_direction * pos_x * 0.75
+    args.state.ball_y_direction = Math.sqrt(args.state.max_ball_direction ** 2 - args.state.ball_x_direction ** 2)
   end
 end
