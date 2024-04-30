@@ -5,8 +5,8 @@ def tick args
   @game ||= Game.new
   @shop ||= Shop.new
 
-  # @menu.menu args
-  @game.game args
+  @shop.menu args
+  # @game.game args
 
 
   args.outputs.labels << {

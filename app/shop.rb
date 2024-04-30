@@ -1,15 +1,19 @@
 class Shop
   def menu args
-    args.state.upgrade_1_count ||= 0
+
+  # args.gtk.log upgrades: args.state.upgrades
+
+    args.state.ball_speed ||= 5
     args.state.upgrade_2_count ||= 0
     args.state.upgrade_3_count ||= 0
     args.state.upgrades ||= []
 
     if args.state.tick_count == 0
-      args.state.upgrades << Upgrade.new(x: 100, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, label_text: "Upgrade 1", proc: -> { args.state.upgrade_1_count += 1 })
-      args.state.upgrades << Upgrade.new(x: 400, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, label_text: "Upgrade 2", proc: -> { args.state.upgrade_2_count += 1 })
-      args.state.upgrades << Upgrade.new(x: 700, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, label_text: "Upgrade 3", proc: -> { args.state.upgrade_3_count += 1 })
+      args.state.upgrades << Upgrade.new(x: 100, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, **upgrades_hash(args).ball_speed)
+      args.state.upgrades << Upgrade.new(x: 400, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, cost: 0, label_text: "Upgrade 2", proc: -> { args.state.upgrade_2_count += 1 })
+      args.state.upgrades << Upgrade.new(x: 700, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, cost: 0, label_text: "Upgrade 3", proc: -> { args.state.upgrade_3_count += 1 })
     end
+
 
     args.state.upgrades.each do |upgrade|
       args.outputs.labels << upgrade.label
@@ -24,9 +28,17 @@ class Shop
       end
     end
 
-    args.outputs.labels << [640, 700, "Upgrade 1 count: #{args.state.upgrade_1_count}", 5, 1, 0, 0, 0]
+    args.outputs.labels << [640, 700, "Ball Speed: #{args.state.ball_speed}", 5, 1, 0, 0, 0]
     args.outputs.labels << [640, 650, "Upgrade 2 count: #{args.state.upgrade_2_count}", 5, 1, 0, 0, 0]
     args.outputs.labels << [640, 600, "Upgrade 3 count: #{args.state.upgrade_3_count}", 5, 1, 0, 0, 0]
+  end
+
+  def upgrades_hash args
+    {
+      "ball_speed": { label_text: "Ball Speed", cost: 10, proc: -> { args.state.ball_speed += 1 }}
+      # "ball_damage" => { name: "Ball Damage", cost: 20, proc: -> { args.state.upgrade_2_count += 1 } },
+      # "paddle_width" => { name: "Paddle Width", cost: 30, proc: -> { args.state.upgrade_3_count += 1 } }
+    }
   end
 end
 
@@ -39,7 +51,7 @@ class Upgrade
   :source_x2, :source_y2, :source_x3, :source_y3, :x2, :y2, :x3, :y3,
   :anchor_x, :anchor_y
 
-  def initialize(x:, y:, w:, h:, r:, g:, b:, label_text:, proc:)
+  def initialize(x:, y:, w:, h:, r:, g:, b:, label_text:, proc:, cost: 0)
     self.x = x
     self.y = y
     self.w = w
@@ -49,6 +61,7 @@ class Upgrade
     self.b = b
     @proc = proc
     @label_text = label_text
+    @cost = cost
   end
 
   def call
