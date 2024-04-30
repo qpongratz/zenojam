@@ -10,6 +10,7 @@ class Game
     args.state.bricks_left ||= 1000000000
     args.state.brick_width ||= 50
     args.state.brick_height ||= 20
+    args.state.brick_health_multiplier ||= 1
     args.state.paddle ||= { x: 100, y: 100, w: 120, h: 10, r: 0, g: 0, b: 0 }
 
     set_quadrant_angles args
@@ -24,7 +25,7 @@ class Game
           x = 50 + (i * 60)
           y = 650 - (j * 30)
           next if rand(2) == 0
-          args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, health: (rand(7) + 1) )
+          args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: (rand(7) + 1), health_multiplier: args.state.brick_health_multiplier)
         end
       end
     end
@@ -64,9 +65,8 @@ class Game
         args.state.ball_y_direction *= -1
         args.state.move_ball = false
       end
-      brick.take_damage(args.state.ball_damage)
+      args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
       args.state.bricks.delete(brick) if brick.health <= 0
-      args.state.bricks_left -= 1
     end
 
     calculate_new_ball_position args

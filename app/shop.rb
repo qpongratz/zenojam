@@ -4,14 +4,12 @@ class Shop
   # args.gtk.log upgrades: args.state.upgrades
 
     args.state.ball_speed ||= 5
-    args.state.upgrade_2_count ||= 0
-    args.state.upgrade_3_count ||= 0
     args.state.upgrades ||= []
 
     if args.state.upgrades.empty?
       args.state.upgrades << Upgrade.new(x: 100, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, **upgrades_hash(args).ball_speed)
-      args.state.upgrades << Upgrade.new(x: 400, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, cost: 0, label_text: "Upgrade 2", proc: -> { args.state.upgrade_2_count += 1 })
-      args.state.upgrades << Upgrade.new(x: 700, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, cost: 0, label_text: "Upgrade 3", proc: -> { args.state.upgrade_3_count += 1 })
+      args.state.upgrades << Upgrade.new(x: 400, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, **upgrades_hash(args).brick_health)
+      args.state.upgrades << Upgrade.new(x: 700, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, **upgrades_hash(args).ball_damage)
     end
 
 
@@ -29,14 +27,15 @@ class Shop
     end
 
     args.outputs.labels << [640, 700, "Ball Speed: #{args.state.ball_speed}", 5, 1, 0, 0, 0]
-    args.outputs.labels << [640, 650, "Upgrade 2 count: #{args.state.upgrade_2_count}", 5, 1, 0, 0, 0]
-    args.outputs.labels << [640, 600, "Upgrade 3 count: #{args.state.upgrade_3_count}", 5, 1, 0, 0, 0]
+    args.outputs.labels << [640, 650, "Brick Health Mult: #{args.state.brick_health_multiplier}", 5, 1, 0, 0, 0]
+    args.outputs.labels << [640, 600, "Ball Damage: #{args.state.ball_damage}", 5, 1, 0, 0, 0]
   end
 
   def upgrades_hash args
     {
-      "ball_speed": { label_text: "Ball Speed", cost: 10, proc: -> { args.state.ball_speed += 1 }}
-      # "ball_damage" => { name: "Ball Damage", cost: 20, proc: -> { args.state.upgrade_2_count += 1 } },
+      ball_speed: { label_text: "Ball Speed", cost: 10, proc: -> { args.state.ball_speed += 1 }},
+      brick_health: { label_text: "Brick Health Mult", cost: 20, proc: -> { args.state.brick_health_multiplier += 1 }},
+      ball_damage: { label_text: "Ball Damage", cost: 20, proc: -> { args.state.ball_damage += 1 } }
       # "paddle_width" => { name: "Paddle Width", cost: 30, proc: -> { args.state.upgrade_3_count += 1 } }
     }
   end
