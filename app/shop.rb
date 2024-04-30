@@ -8,7 +8,7 @@ class Shop
     args.state.upgrade_3_count ||= 0
     args.state.upgrades ||= []
 
-    if args.state.tick_count == 0
+    if args.state.upgrades.empty?
       args.state.upgrades << Upgrade.new(x: 100, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, **upgrades_hash(args).ball_speed)
       args.state.upgrades << Upgrade.new(x: 400, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, cost: 0, label_text: "Upgrade 2", proc: -> { args.state.upgrade_2_count += 1 })
       args.state.upgrades << Upgrade.new(x: 700, y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, cost: 0, label_text: "Upgrade 3", proc: -> { args.state.upgrade_3_count += 1 })

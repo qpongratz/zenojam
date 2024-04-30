@@ -4,9 +4,19 @@ require 'app/shop'
 def tick args
   @game ||= Game.new
   @shop ||= Shop.new
+  args.state.game_state = true if args.state.game_state.nil?
 
-  @shop.menu args
-  # @game.game args
+  state_button ||= { x: 10, y: 10, w: 100, h: 50 }
+
+  args.outputs.labels << { x: 10, y: 30, text: "To #{args.state.game_state ? "Shop" : "Game"}" }
+  args.outputs.borders << state_button
+
+  if (args.inputs.mouse.click && (args.inputs.mouse.inside_rect? state_button))
+    args.state.game_state = !args.state.game_state
+  end
+
+  @shop.menu args unless args.state.game_state
+  @game.game args if args.state.game_state
 
 
   args.outputs.labels << {
