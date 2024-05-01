@@ -18,6 +18,7 @@ def tick args
   @shop.menu args unless args.state.game_state
   @game.game args if args.state.game_state
 
+  args.outputs.labels << [50, 700, "$#{args.state.wallet}", 5, 1, 0, 255, 150]
 
   args.outputs.labels << {
     x: 60.from_right,

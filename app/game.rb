@@ -12,10 +12,21 @@ class Game
     args.state.brick_height ||= 20
     args.state.brick_health_multiplier ||= 1
     args.state.paddle ||= { x: 100, y: 100, w: 120, h: 10, r: 0, g: 0, b: 0 }
+    args.state.wallet ||= 10
+    args.state.interest ||= 0.1
+    args.state.level_clear_bonus ||= 5
 
     set_quadrant_angles args
 
     args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/circle/orange.png' }
+
+
+    if args.state.tick_count != 0 && args.state.bricks.empty?
+      args.state.game_state = !args.state.game_state
+      args.state.wallet += args.state.level_clear_bonus
+      args.state.wallet += (args.state.wallet * args.state.interest).ceil
+    end
+
 
     args.state.bricks ||= []
     if args.state.tick_count == 0 || args.state.bricks.empty?

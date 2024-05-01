@@ -3,7 +3,7 @@ class Shop
 
   # args.gtk.log upgrades: args.state.upgrades
 
-    args.state.ball_speed ||= 5
+    # args.state.ball_speed ||= 5
     args.state.upgrades ||= []
 
     if args.state.upgrades.empty?
@@ -33,9 +33,9 @@ class Shop
 
   def upgrades_hash args
     {
-      ball_speed: { label_text: "Ball Speed", cost: 10, proc: -> { args.state.ball_speed += 1 }},
-      brick_health: { label_text: "Brick Health Mult", cost: 20, proc: -> { args.state.brick_health_multiplier += 1 }},
-      ball_damage: { label_text: "Ball Damage", cost: 20, proc: -> { args.state.ball_damage += 1 } }
+      ball_speed: { label_text: "Ball Speed", cost: 5, proc: -> { args.state.ball_speed += 1 }},
+      brick_health: { label_text: "Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier += 1 }},
+      ball_damage: { label_text: "Ball Damage", cost: 10, proc: -> { args.state.ball_damage += 1 } }
       # "paddle_width" => { name: "Paddle Width", cost: 30, proc: -> { args.state.upgrade_3_count += 1 } }
     }
   end

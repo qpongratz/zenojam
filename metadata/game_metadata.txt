@@ -9,7 +9,25 @@
 # === Flags available at all licensing tiers ===
 
 # Defines the render scale quality for sprites. scale_quality=0 (default) is nearest neighbor, scale_quality=1 is linear, scale_quality=2 is antialiased.
+# - 0: pixel perfect scaling (use this if your game uses pixel-art)
+# - 1: less blocky visuals,
+# - 2: higher computational overhead than linear, but provides the best visual quality
 # scale_quality=0
+
+# A comma delimited list of directories that should be ignored during the
+# publishing process. For example, if your game supports saves, you'd want to ignore
+# that directory (example format: ignore_directories=tmp,saves,dev,assets).
+#   IMPORTANT:
+#   Any directory that matches the ignore list will be ignored (REGARDLESS OF HIERARCHY).
+#   For example:
+#     ignore_directories value: saves
+#     Directory structure:
+#     - mygame
+#       - saves <---- This directory will be ignored
+#       - libs
+#         - saves <---- This directory will be ignored
+# ignore_directories=saves
+
 
 # === Flags available in DragonRuby Game Toolkit Pro ====
 
