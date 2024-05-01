@@ -4,7 +4,8 @@ require 'app/shop'
 def tick args
   @game ||= Game.new
   @shop ||= Shop.new
-  args.state.game_state = true if args.state.game_state.nil?
+  args.state.game_state = true if args.state.tick_count == 0
+  args.state.reset_board = true if args.state.tick_count == 0
 
   state_button ||= { x: 10, y: 10, w: 100, h: 50 }
 

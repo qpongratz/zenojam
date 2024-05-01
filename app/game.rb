@@ -1,7 +1,9 @@
 require 'app/brick'
+require 'app/paddle'
 
 class Game
   def game args
+    args.state.paddle_width ||= 120
     args.state.ball_speed ||= 5
     args.state.ball_x_direction ||= -1
     args.state.ball_y_direction ||= -1
@@ -11,25 +13,17 @@ class Game
     args.state.brick_width ||= 50
     args.state.brick_height ||= 20
     args.state.brick_health_multiplier ||= 1
-    args.state.paddle ||= { x: 100, y: 100, w: 120, h: 10, r: 0, g: 0, b: 0 }
+    args.state.paddle ||= Paddle.new(x: 640, y: 100, w: args.state.paddle_width, h: 10)
     args.state.wallet ||= 10
     args.state.interest ||= 0.1
     args.state.level_clear_bonus ||= 5
+    args.state.bricks ||= []
 
     set_quadrant_angles args
 
     args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/circle/orange.png' }
 
-
-    if args.state.tick_count != 0 && args.state.bricks.empty?
-      args.state.game_state = !args.state.game_state
-      args.state.wallet += args.state.level_clear_bonus
-      args.state.wallet += (args.state.wallet * args.state.interest).ceil
-    end
-
-
-    args.state.bricks ||= []
-    if args.state.tick_count == 0 || args.state.bricks.empty?
+    if args.state.refresh_board == true
       10.times do |j|
         20.times do |i|
           break if args.state.bricks.length >= 30
@@ -39,6 +33,18 @@ class Game
           args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: (rand(7) + 1), health_multiplier: args.state.brick_health_multiplier)
         end
       end
+      args.state.refresh_board = false
+    end
+
+    if args.state.bricks.empty?
+      args.state.game_state = !args.state.game_state
+      args.state.wallet += args.state.level_clear_bonus
+      args.state.wallet += (args.state.wallet * args.state.interest).ceil
+      args.state.refresh_board = true
+    end
+
+
+    if args.state.tick_count == 0 || args.state.bricks.empty?
     end
 
 
