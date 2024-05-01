@@ -33,10 +33,6 @@ class Shop
     args.outputs.labels << [640, 650, "Brick Health Mult: #{args.state.brick_health_multiplier}", 5, 1, 0, 0, 0]
     args.outputs.labels << [640, 600, "Ball Damage: #{args.state.ball_damage}", 5, 1, 0, 0, 0]
   end
-
-  def upgrades args
-
-  end
 end
 
 class Upgrade
@@ -80,11 +76,6 @@ class Button
   def call(...)
     @proc.call(...)
   end
-
-  # omg the work we'll have to do to render labels that fit into a box and in the right
-  # spot and making sure it's not too long is going to be so annoying,
-  # so we might just put that part off, but like a button class that does
-  # something like that might be good.
 
   def label
     { x: (x), y: (y + h/2), h: h, w: w, text: @label_text, r: 0, g: 0, b: 0}

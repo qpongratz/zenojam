@@ -14,7 +14,11 @@ class Paddle
     self.h = h
   end
 
+  def path
+    "sprites/ours/paddle.png"
+  end
+
   def primitive_marker
-    :solid
+    :sprite
   end
 end

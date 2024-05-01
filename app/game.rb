@@ -24,7 +24,7 @@ class Game
 
     set_quadrant_angles args
 
-    args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/circle/orange.png' }
+    args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/ours/ball.png' }
 
     setup_board args if args.state.refresh_board == true
     end_of_level args if args.state.bricks.empty?
@@ -78,7 +78,7 @@ class Game
 
     args.outputs.labels << [640, 700, "Bricks left: #{args.state.bricks_left}", 5, 1, 255, 255, 255]
     args.outputs.sprites << args.state.bricks
-    args.outputs.solids << args.state.paddle
+    args.outputs.sprites << args.state.paddle
     args.outputs.sprites << args.state.ball
   end
 
