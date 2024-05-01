@@ -20,13 +20,13 @@ class Brick
 
   def set_path
     @path = case health / health_multiplier
-    when ...1 then 'sprites/square/red.png'
-    when ...2 then 'sprites/square/orange.png'
-    when ...3 then 'sprites/square/yellow.png'
-    when ...4 then 'sprites/square/green.png'
-    when ...5 then 'sprites/square/blue.png'
-    when ...6 then 'sprites/square/indigo.png'
-    when ...7 then 'sprites/square/violet.png'
+    when ...2 then 'sprites/square/red.png'
+    when ...3 then 'sprites/square/orange.png'
+    when ...4 then 'sprites/square/yellow.png'
+    when ...5 then 'sprites/square/green.png'
+    when ...6 then 'sprites/square/blue.png'
+    when ...7 then 'sprites/square/indigo.png'
+    when ...8 then 'sprites/square/violet.png'
     end
   end
 
@@ -41,4 +41,3 @@ class Brick
     :sprite
   end
 end
-
