@@ -4,6 +4,7 @@ require 'app/paddle'
 class Game
   def game args
     args.state.paddle_width ||= 120
+    args.state.paddle_speed ||= 10
     args.state.ball_speed ||= 5
     args.state.ball_x_direction ||= -1
     args.state.ball_y_direction ||= -1
@@ -18,6 +19,8 @@ class Game
     args.state.interest ||= 0.1
     args.state.level_clear_bonus ||= 5
     args.state.bricks ||= []
+    args.state.play_space_max_y ||= 720
+    args.state.play_space_max_x ||= 1280
 
     set_quadrant_angles args
 
@@ -27,20 +30,20 @@ class Game
     end_of_level args if args.state.bricks.empty?
 
     if args.inputs.keyboard.left && args.state.paddle.x > 4
-      args.state.paddle.x -= 10
-    elsif args.inputs.keyboard.right && args.state.paddle.x < 1280 - 104
-      args.state.paddle.x += 10
+      args.state.paddle.x -= args.state.paddle_speed
+    elsif args.inputs.keyboard.right && args.state.paddle.x < args.state.play_space_max_x - 104
+      args.state.paddle.x += args.state.paddle_speed
     end
 
     if args.state.ball.intersect_rect? args.state.paddle
       modify_ball_direction args
     end
 
-    if args.state.new_ball_x < 0 || args.state.new_ball_x > 1280 - 10
+    if args.state.new_ball_x < 0 || args.state.new_ball_x > args.state.play_space_max_x - 10
       args.state.ball_x_direction *= -1
     end
 
-    if args.state.new_ball_y < 0 || args.state.new_ball_y > 720 - 10
+    if args.state.new_ball_y < 0 || args.state.new_ball_y > args.state.play_space_max_y - 10
       args.state.ball_y_direction *= -1
     end
 
