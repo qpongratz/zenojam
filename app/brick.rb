@@ -31,7 +31,7 @@ class Brick
   end
 
   def take_damage(damage)
-    p damage_dealt = damage.clamp(0, health)
+    damage_dealt = damage.clamp(0, health)
     self.health -= damage_dealt
     set_path
     damage_dealt

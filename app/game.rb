@@ -23,30 +23,8 @@ class Game
 
     args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/circle/orange.png' }
 
-    if args.state.refresh_board == true
-      10.times do |j|
-        20.times do |i|
-          break if args.state.bricks.length >= 30
-          x = 50 + (i * 60)
-          y = 650 - (j * 30)
-          next if rand(2) == 0
-          args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: (rand(7) + 1), health_multiplier: args.state.brick_health_multiplier)
-        end
-      end
-      args.state.refresh_board = false
-    end
-
-    if args.state.bricks.empty?
-      args.state.game_state = !args.state.game_state
-      args.state.wallet += args.state.level_clear_bonus
-      args.state.wallet += (args.state.wallet * args.state.interest).ceil
-      args.state.refresh_board = true
-    end
-
-
-    if args.state.tick_count == 0 || args.state.bricks.empty?
-    end
-
+    setup_board args if args.state.refresh_board == true
+    end_of_level args if args.state.bricks.empty?
 
     if args.inputs.keyboard.left && args.state.paddle.x > 4
       args.state.paddle.x -= 10
@@ -102,6 +80,26 @@ class Game
     )
 
     args.state.vertical_quadrant_angle ||= (90 - args.state.horizontal_quadrant_angle)
+  end
+
+  def setup_board args
+    10.times do |j|
+      20.times do |i|
+        break if args.state.bricks.length >= 30
+        x = 50 + (i * 60)
+        y = 650 - (j * 30)
+        next if rand(2) == 0
+        args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: (rand(7) + 1), health_multiplier: args.state.brick_health_multiplier)
+      end
+    end
+    args.state.refresh_board = false
+  end
+
+  def end_of_level args
+    args.state.game_state = !args.state.game_state
+    args.state.wallet += args.state.level_clear_bonus
+    args.state.wallet += (args.state.wallet * args.state.interest).ceil
+    args.state.refresh_board = true
   end
 
   def move_ball args
