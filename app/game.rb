@@ -29,10 +29,17 @@ class Game
     setup_board args if args.state.refresh_board == true
     end_of_level args if args.state.bricks.empty?
 
-    if args.inputs.keyboard.left && args.state.paddle.x > 4
+    if args.inputs.up && args.state.ball_launched == false
+      launch_ball args
+      args.state.ball_launched = true
+    end
+
+    if args.inputs.left && args.state.paddle.x > 4
       args.state.paddle.x -= args.state.paddle_speed
-    elsif args.inputs.keyboard.right && args.state.paddle.x < args.state.play_space_max_x - 104
+      args.state.ball.x -= args.state.paddle_speed if args.state.ball_launched == false
+    elsif args.inputs.right && args.state.paddle.x < args.state.play_space_max_x - 104
       args.state.paddle.x += args.state.paddle_speed
+      args.state.ball.x += args.state.paddle_speed if args.state.ball_launched == false
     end
 
     if args.state.ball.intersect_rect? args.state.paddle
@@ -56,19 +63,17 @@ class Game
       target_y = args.state.ball_y_direction.positive? ? 270 : 90
       if Geometry.angle_within_range? test_angle, target_x, args.state.vertical_quadrant_angle
         args.state.ball_x_direction *= -1
-        args.state.move_ball = false
       end
 
       if Geometry.angle_within_range? test_angle, target_y, args.state.horizontal_quadrant_angle
         args.state.ball_y_direction *= -1
-        args.state.move_ball = false
       end
       args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
       args.state.bricks.delete(brick) if brick.health <= 0
     end
 
-    calculate_new_ball_position args
-    move_ball args
+    calculate_new_ball_position args if args.state.move_ball
+    move_ball args if args.state.move_ball
 
 
     args.outputs.labels << [640, 700, "Bricks left: #{args.state.bricks_left}", 5, 1, 255, 255, 255]
@@ -85,6 +90,11 @@ class Game
     args.state.vertical_quadrant_angle ||= (90 - args.state.horizontal_quadrant_angle)
   end
 
+  def launch_ball args
+    args.state.ball_launched = true
+    args.state.move_ball = true
+  end
+
   def setup_board args
     10.times do |j|
       20.times do |i|
@@ -95,7 +105,10 @@ class Game
         args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: (rand(7) + 1), health_multiplier: args.state.brick_health_multiplier)
       end
     end
+    args.state.ball_launched = false
     args.state.refresh_board = false
+    args.state.ball.x = args.state.paddle.x
+    args.state.ball.y = args.state.paddle.y + args.state.paddle.h
   end
 
   def end_of_level args
@@ -106,8 +119,6 @@ class Game
   end
 
   def move_ball args
-    args.state.old_ball_x = args.state.ball.x
-    args.state.old_ball_y = args.state.ball.y
     args.state.ball.x = args.state.new_ball_x
     args.state.ball.y = args.state.new_ball_y
   end
