@@ -3,8 +3,8 @@ class Shop
 
   args.state.upgrades = [
       Upgrade.new(label_text: "Ball Speed", cost: 5, proc: -> { args.state.ball_speed += 1 }),
-      Upgrade.new(label_text: "Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier += 1 }),
-      Upgrade.new(label_text: "Ball Damage", cost: 10, proc: -> { args.state.ball_damage += 1 })
+      Upgrade.new(label_text: "Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier *= 10 }),
+      Upgrade.new(label_text: "Ball Damage", cost: 5, proc: -> { args.state.ball_damage*= 2 })
     ]
 
     args.state.buttons ||= []
