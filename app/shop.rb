@@ -11,14 +11,14 @@ class Shop
 
     if args.state.buttons.empty?
       args.state.upgrades.each_with_index do |upgrade, index|
-        args.state.buttons << Button.new(x: (100 + 250 * index), y: 100, w: 200, h: 200, r: 255, g: 0, b: 0, label_text: upgrade.label_text, proc: upgrade)
+        args.state.buttons << Button.new(x: (100 + 250 * index), y: 100, w: 200, h: 200, label_text: upgrade.label_text, proc: upgrade)
       end
     end
 
 
     args.state.buttons.each do |button|
       args.outputs.labels << button.label
-      args.outputs.borders << button
+      args.outputs.sprites << button
     end
 
     if args.inputs.mouse.click
@@ -29,9 +29,9 @@ class Shop
       end
     end
 
-    args.outputs.labels << [640, 700, "Ball Speed: #{args.state.ball_speed}", 5, 1, 0, 0, 0]
-    args.outputs.labels << [640, 650, "Brick Health Mult: #{args.state.brick_health_multiplier}", 5, 1, 0, 0, 0]
-    args.outputs.labels << [640, 600, "Ball Damage: #{args.state.ball_damage}", 5, 1, 0, 0, 0]
+    args.outputs.labels << [640, 700, "Ball Speed: #{args.state.ball_speed}", 5, 1, 255, 255, 255]
+    args.outputs.labels << [640, 650, "Brick Health Mult: #{args.state.brick_health_multiplier}", 5, 1, 255, 255, 255]
+    args.outputs.labels << [640, 600, "Ball Damage: #{args.state.ball_damage}", 5, 1, 255, 255, 255]
   end
 end
 
@@ -61,14 +61,11 @@ class Button
   :source_x2, :source_y2, :source_x3, :source_y3, :x2, :y2, :x3, :y3,
   :anchor_x, :anchor_y
 
-  def initialize(x:, y:, w:, h:, r:, g:, b:, label_text:, proc:)
+  def initialize(x:, y:, w:, h:, label_text:, proc:)
     self.x = x
     self.y = y
     self.w = w
     self.h = h
-    self.r = r
-    self.g = g
-    self.b = b
     @proc = proc
     @label_text = label_text
   end
@@ -81,7 +78,11 @@ class Button
     { x: (x), y: (y + h/2), h: h, w: w, text: @label_text, r: 0, g: 0, b: 0}
   end
 
+  def path
+    'sprites/ours/button.png'
+  end
+
   def primitive_marker
-    :border
+    :sprite
   end
 end
