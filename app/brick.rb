@@ -20,13 +20,13 @@ class Brick
 
   def set_path
     @path = case health / health_multiplier
-    when ...2 then 'sprites/ours/red.png'
-    when ...3 then 'sprites/ours/orange.png'
-    when ...4 then 'sprites/ours/pink.png'
-    when ...5 then 'sprites/ours/green.png'
-    when ...6 then 'sprites/ours/blue.png'
-    when ...7 then 'sprites/ours/grey.png'
-    when ...8 then 'sprites/ours/black.png'
+    when ..1 then 'sprites/ours/red.png'
+    when ..2 then 'sprites/ours/orange.png'
+    when ..3 then 'sprites/ours/pink.png'
+    when ..4 then 'sprites/ours/green.png'
+    when ..5 then 'sprites/ours/blue.png'
+    when ..6 then 'sprites/ours/grey.png'
+    when ..7 then 'sprites/ours/black.png'
     end
   end
 

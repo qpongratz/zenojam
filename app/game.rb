@@ -19,9 +19,13 @@ class Game
     args.state.interest ||= 0.1
     args.state.level_clear_bonus ||= 5
     args.state.bricks ||= []
-    args.state.play_space_max_y ||= 720
-    args.state.play_space_max_x ||= 1280
-
+    args.state.play_space_width ||= 800
+    args.state.play_space_height ||= 600
+    args.state.play_x ||= 150
+    args.state.play_y ||= 100
+    args.state.play_space_max_x ||= args.state.play_x + args.state.play_space_width
+    args.state.play_space_max_y ||= args.state.play_y + args.state.play_space_height
+    args.state.play_border = { x: args.state.play_x, y: args.state.play_y, w: args.state.play_space_width, h: args.state.play_space_height, r: 255, g: 255, b: 255 }
     set_quadrant_angles args
 
     args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/ours/ball.png' }
@@ -34,7 +38,7 @@ class Game
       args.state.ball_launched = true
     end
 
-    if args.inputs.left && args.state.paddle.x > 4
+    if args.inputs.left && args.state.paddle.x > args.state.play_x
       args.state.paddle.x -= args.state.paddle_speed
       args.state.ball.x -= args.state.paddle_speed if args.state.ball_launched == false
     elsif args.inputs.right && args.state.paddle.x < args.state.play_space_max_x - 104
@@ -49,12 +53,14 @@ class Game
       # Bloop by andersmmg -- https://freesound.org/s/523423/ -- License: Attribution 4.0
     end
 
-    if args.state.new_ball_x < 0 || args.state.new_ball_x > args.state.play_space_max_x - 10
-      args.state.ball_x_direction *= -1
-    end
+    if args.state.ball_launched
+      if args.state.new_ball_x < args.state.play_x || args.state.new_ball_x > args.state.play_space_max_x - 10
+        args.state.ball_x_direction *= -1
+      end
 
-    if args.state.new_ball_y < 0 || args.state.new_ball_y > args.state.play_space_max_y - 10
-      args.state.ball_y_direction *= -1
+      if args.state.new_ball_y < args.state.play_y || args.state.new_ball_y > args.state.play_space_max_y - 10
+        args.state.ball_y_direction *= -1
+      end
     end
 
     brick = args.geometry.find_intersect_rect args.state.ball, args.state.bricks
@@ -80,7 +86,8 @@ class Game
     move_ball args if args.state.ball_launched
 
 
-    args.outputs.labels << [640, 700, "Bricks left: #{args.state.bricks_left}", 5, 1, 255, 255, 255]
+    args.outputs.borders << args.state.play_border
+    args.outputs.labels << [1110, 50, "Bricks left: #{args.state.bricks_left}", 5, 1, 255, 255, 255]
     args.outputs.sprites << args.state.bricks
     args.outputs.sprites << args.state.paddle
     args.outputs.sprites << args.state.ball
@@ -100,10 +107,9 @@ class Game
 
   def setup_board args
     10.times do |j|
-      20.times do |i|
-        break if args.state.bricks.length >= 30
-        x = 50 + (i * 60)
-        y = 650 - (j * 30)
+      (args.state.play_space_width / args.state.brick_width).to_i.times do |i|
+        x = args.state.play_x + (i * args.state.brick_width)
+        y = args.state.play_space_max_y - (j * args.state.brick_height) - args.state.brick_height
         next if rand(2) == 0
         args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: (rand(7) + 1), health_multiplier: args.state.brick_health_multiplier)
       end
