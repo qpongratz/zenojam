@@ -115,10 +115,19 @@ class Game
   end
 
   def end_of_level args
-    args.state.game_state = !args.state.game_state
-    args.state.wallet += args.state.level_clear_bonus
-    args.state.wallet += (args.state.wallet * args.state.interest).ceil
-    args.state.refresh_board = true
+    if args.state.bricks_left == 0
+      end_game args
+    else
+      args.state.game_state = !args.state.game_state
+      args.state.wallet += args.state.level_clear_bonus
+      args.state.wallet += (args.state.wallet * args.state.interest).ceil
+      args.state.brick_health_multiplier *= 10
+      args.state.refresh_board = true
+    end
+  end
+
+  def end_game args
+    args.outputs.labels << [640, 450, "U are teh bigg billionaire!", 5, 1, 0, 0, 0]
   end
 
   def move_ball args
