@@ -44,6 +44,9 @@ class Game
 
     if args.state.ball.intersect_rect? args.state.paddle
       modify_ball_direction args
+      args.outputs.sounds << 'sounds/bloop.wav'
+      # We'll need to credit this if we leave it in the game
+      # Bloop by andersmmg -- https://freesound.org/s/523423/ -- License: Attribution 4.0
     end
 
     if args.state.new_ball_x < 0 || args.state.new_ball_x > args.state.play_space_max_x - 10
@@ -70,10 +73,11 @@ class Game
       end
       args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
       args.state.bricks.delete(brick) if brick.health <= 0
+      args.outputs.sounds << 'sounds/brick.wav'
     end
 
-    calculate_new_ball_position args if args.state.move_ball
-    move_ball args if args.state.move_ball
+    calculate_new_ball_position args if args.state.ball_launched
+    move_ball args if args.state.ball_launched
 
 
     args.outputs.labels << [640, 700, "Bricks left: #{args.state.bricks_left}", 5, 1, 255, 255, 255]
@@ -92,7 +96,6 @@ class Game
 
   def launch_ball args
     args.state.ball_launched = true
-    args.state.move_ball = true
   end
 
   def setup_board args
