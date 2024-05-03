@@ -16,7 +16,7 @@ class Game
     args.state.ball_y_direction ||= -1
     args.state.max_ball_direction ||= Math.sqrt(args.state.ball_x_direction ** 2 + args.state.ball_y_direction ** 2)
     args.state.ball_damage ||= 1
-    args.state.bricks_left ||= 1000000000
+    args.state.bricks_left ||= 1
     args.state.brick_width ||= 50
     args.state.brick_height ||= 20
     args.state.brick_health_multiplier ||= 1
@@ -41,7 +41,7 @@ class Game
 
     setup_board args if args.state.refresh_board == true
 
-    args.state.current_scene = :gameover if args.state.bricks_left <= 0
+    args.state.current_scene = :game_over if args.state.bricks_left <= 0
     end_level args if args.state.bricks.size <= 5
 
     if args.inputs.up && args.state.ball_launched == false
@@ -50,7 +50,7 @@ class Game
     end
 
     if args.state.ball.y < args.state.play_y
-      args.state.current_scene = :gameover
+      args.state.current_scene = :game_over
       args.state.refresh_board = true
       args.state.bricks = []
     end

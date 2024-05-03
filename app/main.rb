@@ -1,13 +1,13 @@
 require 'app/game'
 require 'app/shop'
 require 'app/title'
-require 'app/gameover'
+require 'app/game_over'
 
 def tick args
   @game ||= Game.new
   @shop ||= Shop.new
   @title ||= Title.new
-  @gameover ||= Gameover.new
+  @game_over ||= GameOver.new
 
   args.state.current_scene ||= :title
 
@@ -24,11 +24,11 @@ def tick args
     @game.game args
   when :shop
     @shop.menu args
-  when :gameover
+  when :game_over
     if args.state.bricks_left <= 0
-      @gameover.game_won args
+      @game_over.game_won args
     else
-      @gameover.game_lost args
+      @game_over.game_lost args
     end
   end
 

@@ -1,4 +1,4 @@
-class Gameover
+class GameOver
   def game_lost args
     args.outputs.labels << [640, 500, "Whoops, you dropped your ball.", 5, 1, 255, 255, 255]
     args.outputs.labels << [640, 450, "Fret not. For you have a choice.", 5, 1, 255, 255, 255]
@@ -23,15 +23,16 @@ class Gameover
   end
 
   def game_won args
-    args.outputs.labels << [640, 500, "You are teh billionaire winner!!1!11!@", 5, 1, 255, 255, 255]
+    args.outputs.labels << [600, 200, "Congratulations", 5, 1, 255, 255, 255]
+    args.outputs.labels << [600, 160, "You are able to see the night sky once again.", 5, 1, 255, 255, 255]
 
-    restart_button ||= { x: 515, y: 325, w: 175, h: 50, path: "sprites/ours/button.png"}
-    args.outputs.labels << { x: 550, y: 363, text: "Play Again" }
+    args.state.background = { x: 0, y: 0, w: 1280, h: 720, path: "sprites/background/sky.png" }
+    restart_button ||= { x: 515, y: 50, w: 175, h: 50, path: "sprites/ours/button.png"}
+    args.outputs.labels << { x: 575, y: 85, text: "Quit" }
     args.outputs.sprites << restart_button
 
     if (args.inputs.mouse.click && (args.inputs.mouse.inside_rect? restart_button))
-      reset_game args
-      args.state.current_scene = :title
+      args.gtk.request_quit
     end
   end
 
