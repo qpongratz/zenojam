@@ -1,11 +1,12 @@
 class Shop
-  def menu args
+  ALL_UPGRADES = [
+    Upgrade.new(label_text: "Ball Speed", cost: 5, proc: -> { args.state.ball_speed += 1 }),
+    Upgrade.new(label_text: "Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier *= 10 }),
+    Upgrade.new(label_text: "Ball Damage", cost: 5, proc: -> { args.state.ball_damage*= 2 })
+  ]
 
-  args.state.upgrades = [
-      Upgrade.new(label_text: "Ball Speed", cost: 5, proc: -> { args.state.ball_speed += 1 }),
-      Upgrade.new(label_text: "Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier *= 10 }),
-      Upgrade.new(label_text: "Ball Damage", cost: 5, proc: -> { args.state.ball_damage*= 2 })
-    ]
+  def menu args
+    args.state.upgrades ||= ALL_UPGRADES.shuffle.take(3)
 
     args.state.buttons ||= []
 
@@ -33,6 +34,8 @@ class Shop
 
     if (args.inputs.mouse.click && (args.inputs.mouse.inside_rect? args.state.state_button))
       args.state.current_scene = :game
+      args.state.upgrades = nil
+      args.state.buttons = []
     end
 
     args.outputs.sprites << args.state.state_button
