@@ -38,6 +38,12 @@ class Game
       args.state.ball_launched = true
     end
 
+    if args.state.ball.y < args.state.play_y
+      args.state.current_scene = :gameover
+      args.state.refresh_board = true
+      args.state.bricks = []
+    end
+
     if args.inputs.left && args.state.paddle.x > args.state.play_x
       args.state.paddle.x -= args.state.paddle_speed
       args.state.ball.x -= args.state.paddle_speed if args.state.ball_launched == false
@@ -85,7 +91,6 @@ class Game
     calculate_new_ball_position args if args.state.ball_launched
     move_ball args if args.state.ball_launched
 
-
     args.outputs.borders << args.state.play_border
     args.outputs.labels << [1110, 50, "Bricks left: #{args.state.bricks_left}", 5, 1, 255, 255, 255]
     args.outputs.sprites << args.state.bricks
@@ -121,19 +126,15 @@ class Game
   end
 
   def end_of_level args
-    if args.state.bricks_left == 0
-      end_game args
-    else
+    if args.state.bricks_left <= 0
+      args.state.current_scene = :gameover
+    elsif args.state.current_scene == :game && args.state.bricks.none?
       args.state.current_scene = :shop
       args.state.wallet += args.state.level_clear_bonus
       args.state.wallet += (args.state.wallet * args.state.interest).ceil
       args.state.brick_health_multiplier *= 10
       args.state.refresh_board = true
     end
-  end
-
-  def end_game args
-    args.outputs.labels << [640, 450, "U are teh bigg billionaire!", 5, 1, 0, 0, 0]
   end
 
   def move_ball args
@@ -152,5 +153,11 @@ class Game
     pos_x = (ball_center_x - paddle_center_x) / (args.state.paddle.w / 2)
     args.state.ball_x_direction = args.state.max_ball_direction * pos_x * 0.75
     args.state.ball_y_direction = Math.sqrt(args.state.max_ball_direction ** 2 - args.state.ball_x_direction ** 2)
+  end
+
+  def lose_game
+    if args.state.ball_center_y < args.state.play_y
+      args.state.current_scene = :gameover
+    end
   end
 end

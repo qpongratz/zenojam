@@ -1,11 +1,13 @@
 require 'app/game'
 require 'app/shop'
 require 'app/title'
+require 'app/gameover'
 
 def tick args
   @game ||= Game.new
   @shop ||= Shop.new
   @title ||= Title.new
+  @gameover ||= Gameover.new
 
   args.state.current_scene = :title if args.state.current_scene.nil?
   @title.start_game args if args.state.current_scene == :title
@@ -25,6 +27,8 @@ def tick args
 
   @shop.menu args if args.state.current_scene == :shop
   @game.game args if args.state.current_scene == :game
+  @gameover.game_won args if args.state.current_scene == :gameover && args.state.bricks_left <= 0
+  @gameover.game_lost args if args.state.current_scene == :gameover && args.state.bricks_left > 0
 
   if args.state.current_scene == :game || args.state.current_scene == :shop
     args.outputs.labels << [50, 700, "$#{args.state.wallet}", 5, 1, 0, 255, 150]
