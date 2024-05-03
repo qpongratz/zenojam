@@ -154,10 +154,4 @@ class Game
     args.state.ball_x_direction = args.state.max_ball_direction * pos_x * 0.75
     args.state.ball_y_direction = Math.sqrt(args.state.max_ball_direction ** 2 - args.state.ball_x_direction ** 2)
   end
-
-  def lose_game
-    if args.state.ball_center_y < args.state.play_y
-      args.state.current_scene = :gameover
-    end
-  end
 end
