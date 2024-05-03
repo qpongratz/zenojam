@@ -20,6 +20,7 @@ class Game
     args.state.paddle ||= Paddle.new(x: 640, y: 100, w: args.state.paddle_width, h: 10)
     args.state.wallet ||= 10
     args.state.interest ||= 0.1
+    args.state.gold_brick_chance ||= 10
     args.state.level_clear_bonus ||= 5
     args.state.bricks ||= []
     args.state.play_space_width ||= 800
@@ -126,7 +127,7 @@ class Game
       args.state.bricks.delete brick
       random_percent = rand(100)
       case rand(100)
-      when ..10
+      when ..args.state.gold_brick_chance
         spawn_power_up args, brick, :gold
       end
     end
