@@ -19,6 +19,8 @@ class PowerUp
     case @type
     when :gold
       "sprites/ours/gold.png"
+    when :short_paddle
+      "sprites/ours/minus.png"
     end
   end
 
@@ -26,6 +28,8 @@ class PowerUp
     case @type
     when :gold
       args.state.wallet += 10
+    when :short_paddle
+      args.state.short_paddle += 200
     end
   end
 

@@ -3,11 +3,12 @@ class Shop
     @all_upgrades ||= [
       Upgrade.new(name: "Double Ball Damage", cost: 5, proc: -> { args.state.ball_damage *= 2 }),
       Upgrade.new(name: "Double Gold Bricks", cost: 10, proc: -> {args.state.gold_brick_chance += 10 }, uses: 1),
-      Upgrade.new(name: "Paddle Size", cost: 5, proc: -> { args.state.paddle.w += 10 }, uses: 4),
+      Upgrade.new(name: "Paddle Size", cost: 5, proc: -> { args.state.paddle.w += 10; args.state.paddle_width += 10 }, uses: 4),
       Upgrade.new(name: "Explosion", cost: 10, proc: -> { args.state.explosion = true }, uses: 1),
       Upgrade.new(name: "Brick Health Levels", cost: 5, proc: -> { args.state.max_brick_health += 1 }, uses: 6),
       Upgrade.new(name: "Paddle Speed", cost: 10, proc: -> { args.state.paddle_speed += 1 }, uses: 5),
-      Upgrade.new(name: "Slow Power-Up Speed", cost: 5, proc: -> { args.state.power_up_speed -= 1 }, uses: 5)
+      Upgrade.new(name: "Slow Power-Up Speed", cost: 5, proc: -> { args.state.power_up_speed -= 1 }, uses: 5),
+      Upgrade.new(name: "Short Paddle Curse", cost: 100, proc: -> { args.state.paddle_shrink_chance += 10; args.state.ball_damage *=100 }, uses: 1)
     ]
   end
 

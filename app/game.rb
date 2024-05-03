@@ -5,6 +5,8 @@ require 'app/explosion'
 
 class Game
   def game args
+    args.state.short_paddle ||= 0
+    args.state.paddle_shrink_chance ||= 100
     args.state.max_brick_health ||= 1
     args.state.explosions ||= []
     args.state.power_ups ||= []
@@ -16,7 +18,7 @@ class Game
     args.state.ball_y_direction ||= -1
     args.state.max_ball_direction ||= Math.sqrt(args.state.ball_x_direction ** 2 + args.state.ball_y_direction ** 2)
     args.state.ball_damage ||= 1
-    args.state.bricks_left ||= 1
+    args.state.bricks_left ||= 1000000000
     args.state.brick_width ||= 50
     args.state.brick_height ||= 20
     args.state.brick_health_multiplier ||= 1
@@ -41,6 +43,12 @@ class Game
 
     setup_board args if args.state.refresh_board == true
 
+    args.state.paddle.w = args.state.paddle_width
+
+    if args.state.short_paddle > 0
+      args.state.short_paddle -= 1
+      args.state.paddle.w = args.state.paddle_width / 2
+    end
     args.state.current_scene = :game_over if args.state.bricks_left <= 0
 
     if args.inputs.up && args.state.ball_launched == false
@@ -51,7 +59,6 @@ class Game
     if args.state.ball.y < args.state.play_y
       args.state.current_scene = :game_over
       args.state.refresh_board = true
-      args.state.bricks = []
     end
 
     if args.inputs.left && args.state.paddle.x > args.state.play_x
@@ -144,6 +151,8 @@ class Game
       case rand(100)
       when ..args.state.gold_brick_chance
         spawn_power_up args, brick, :gold
+      when ..(args.state.paddle_shrink_chance + args.state.gold_brick_chance)
+        spawn_power_up args, brick, :short_paddle
       end
     end
   end
@@ -166,6 +175,8 @@ class Game
   end
 
   def setup_board args
+    args.state.short_paddle = 0
+    args.state.bricks = []
     10.times do |j|
       (args.state.play_space_width / args.state.brick_width).to_i.times do |i|
         x = args.state.play_x + (i * args.state.brick_width)
