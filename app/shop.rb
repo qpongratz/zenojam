@@ -29,9 +29,17 @@ class Shop
       end
     end
 
+    args.outputs.labels << { x: 25, y: 45, text: "To Game" }
+
+    if (args.inputs.mouse.click && (args.inputs.mouse.inside_rect? args.state.state_button))
+      args.state.current_scene = :game
+    end
+
+    args.outputs.sprites << args.state.state_button
     args.outputs.labels << [640, 700, "Ball Speed: #{args.state.ball_speed}", 5, 1, 255, 255, 255]
     args.outputs.labels << [640, 650, "Brick Health Mult: #{args.state.brick_health_multiplier}", 5, 1, 255, 255, 255]
     args.outputs.labels << [640, 600, "Ball Damage: #{args.state.ball_damage}", 5, 1, 255, 255, 255]
+    args.outputs.labels << [50, 700, "$#{args.state.wallet}", 5, 1, 0, 255, 150]
   end
 end
 

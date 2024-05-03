@@ -91,11 +91,20 @@ class Game
     calculate_new_ball_position args if args.state.ball_launched
     move_ball args if args.state.ball_launched
 
+
+    if (args.inputs.mouse.click && (args.inputs.mouse.inside_rect? args.state.state_button))
+      args.state.current_scene = :shop
+    end
+
+    args.outputs.labels << { x: 25, y: 45, text: "To Shop" }
+    args.outputs.sprites << args.state.state_button
+
     args.outputs.borders << args.state.play_border
     args.outputs.labels << [1110, 50, "Bricks left: #{args.state.bricks_left}", 5, 1, 255, 255, 255]
     args.outputs.sprites << args.state.bricks
     args.outputs.sprites << args.state.paddle
     args.outputs.sprites << args.state.ball
+    args.outputs.labels << [50, 700, "$#{args.state.wallet}", 5, 1, 0, 255, 150]
   end
 
   def set_quadrant_angles args
