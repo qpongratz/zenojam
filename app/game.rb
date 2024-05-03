@@ -5,6 +5,7 @@ require 'app/explosion'
 
 class Game
   def game args
+    args.state.max_brick_health ||= 1
     args.state.explosions ||= []
     args.state.power_ups ||= []
     args.state.power_up_speed ||= 8
@@ -168,7 +169,7 @@ class Game
         x = args.state.play_x + (i * args.state.brick_width)
         y = args.state.play_space_max_y - (j * args.state.brick_height) - args.state.brick_height
         next if rand(2) == 0
-        args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: 1, health_multiplier: args.state.brick_health_multiplier)
+        args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: rand(args.state.max_brick_health) + 1, health_multiplier: args.state.brick_health_multiplier)
       end
     end
     args.state.ball_launched = false
