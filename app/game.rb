@@ -1,8 +1,11 @@
 require 'app/brick'
 require 'app/paddle'
+require 'app/power_up'
 
 class Game
   def game args
+    args.state.power_ups ||= []
+    args.state.power_up_speed ||= 8
     args.state.paddle_width ||= 120
     args.state.paddle_speed ||= 10
     args.state.ball_speed ||= 5
@@ -84,12 +87,22 @@ class Game
         args.state.ball_y_direction *= -1
       end
       args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
+      eliminate_destroyed_bricks args
       args.state.bricks.delete(brick) if brick.health <= 0
       args.outputs.sounds << 'sounds/brick.wav'
     end
 
     calculate_new_ball_position args if args.state.ball_launched
     move_ball args if args.state.ball_launched
+
+    args.state.power_ups.each do |power_up|
+      if args.geometry.intersect_rect? args.state.paddle, power_up
+        power_up.call args
+        args.state.power_ups.delete power_up
+      else
+        power_up.y -= args.state.power_up_speed
+      end
+    end
 
 
     if (args.inputs.mouse.click && (args.inputs.mouse.inside_rect? args.state.state_button))
@@ -104,8 +117,25 @@ class Game
     args.outputs.sprites << args.state.bricks
     args.outputs.sprites << args.state.paddle
     args.outputs.sprites << args.state.ball
+    args.outputs.sprites << args.state.power_ups
     args.outputs.labels << [50, 700, "$#{args.state.wallet}", 5, 1, 0, 255, 150]
   end
+
+  def eliminate_destroyed_bricks args
+    args.state.bricks.select { |brick| brick.health <= 0 }.each do |brick|
+      args.state.bricks.delete brick
+      random_percent = rand(100)
+      case rand(100)
+      when ..10
+        spawn_power_up args, brick, :gold
+      end
+    end
+  end
+
+  def spawn_power_up args, brick, type
+    args.state.power_ups << PowerUp.new(x: brick.x, y: brick.y, w: 30, h: 30, type: type)
+  end
+
 
   def set_quadrant_angles args
     args.state.horizontal_quadrant_angle ||= (
@@ -125,7 +155,7 @@ class Game
         x = args.state.play_x + (i * args.state.brick_width)
         y = args.state.play_space_max_y - (j * args.state.brick_height) - args.state.brick_height
         next if rand(2) == 0
-        args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: (rand(7) + 1), health_multiplier: args.state.brick_health_multiplier)
+        args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: 1, health_multiplier: args.state.brick_health_multiplier)
       end
     end
     args.state.ball_launched = false

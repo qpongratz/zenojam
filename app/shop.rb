@@ -1,12 +1,15 @@
 class Shop
-  ALL_UPGRADES = [
-    Upgrade.new(label_text: "Ball Speed", cost: 5, proc: -> { args.state.ball_speed += 1 }),
-    Upgrade.new(label_text: "Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier *= 10 }),
-    Upgrade.new(label_text: "Ball Damage", cost: 5, proc: -> { args.state.ball_damage*= 2 })
-  ]
+  def all_upgrades(args)
+    [
+      Upgrade.new(label_text: "Ball Speed", cost: 5, proc: -> { args.state.ball_speed += 1 }),
+      Upgrade.new(label_text: "Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier *= 10 }),
+      Upgrade.new(label_text: "Double Ball Damage", cost: 5, proc: -> { args.state.ball_damage*= 2 }),
+      Upgrade.new(label_text: "Gold Bricks", cost: 10, proc: -> {args.state.gold_bricks ||= true}, uses: 1)
+    ]
+  end
 
   def menu args
-    args.state.upgrades ||= ALL_UPGRADES.shuffle.take(3)
+    args.state.upgrades ||= all_upgrades(args).reject{ |x| x.uses == 0 }.shuffle.take(3)
 
     args.state.buttons ||= []
 
@@ -42,22 +45,26 @@ class Shop
     args.outputs.labels << [640, 700, "Ball Speed: #{args.state.ball_speed}", 5, 1, 255, 255, 255]
     args.outputs.labels << [640, 650, "Brick Health Mult: #{args.state.brick_health_multiplier}", 5, 1, 255, 255, 255]
     args.outputs.labels << [640, 600, "Ball Damage: #{args.state.ball_damage}", 5, 1, 255, 255, 255]
+    args.outputs.labels << [640, 550, "Gold Bricks: #{args.state.gold_bricks}", 5, 1, 255, 255, 255]
     args.outputs.labels << [50, 700, "$#{args.state.wallet}", 5, 1, 0, 255, 150]
   end
 end
 
 class Upgrade
-  attr_accessor :label_text, :cost, :proc
+  attr_accessor :label_text, :cost, :proc, :uses
 
-  def initialize(label_text:, cost:, proc:)
+  def initialize(label_text:, cost:, proc:, uses: -1)
     @label_text = label_text
     @cost = cost
     @proc = proc
+    @uses = uses
   end
 
   def call args
+    return if uses == 0
     return if cost > args.state.wallet
 
+    uses -= 1
     args.state.wallet -= cost
     proc.call
   end
