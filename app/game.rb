@@ -42,7 +42,6 @@ class Game
     setup_board args if args.state.refresh_board == true
 
     args.state.current_scene = :game_over if args.state.bricks_left <= 0
-    end_level args if args.state.bricks.size <= 5
 
     if args.inputs.up && args.state.ball_launched == false
       launch_ball args
@@ -135,6 +134,7 @@ class Game
     args.outputs.sprites << args.state.power_ups
     args.outputs.sprites << args.state.explosions
     args.outputs.labels << [50, 700, "$#{args.state.wallet}", 5, 1, 0, 255, 150]
+    end_level args if args.state.bricks.size <= 5
   end
 
   def eliminate_destroyed_bricks args
