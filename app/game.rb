@@ -40,7 +40,9 @@ class Game
     args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/ours/ball.png' }
 
     setup_board args if args.state.refresh_board == true
-    end_of_level args if args.state.bricks.empty?
+
+    args.state.current_scene = :gameover if args.state.bricks_left <= 0
+    end_level args if args.state.bricks.size <= 5
 
     if args.inputs.up && args.state.ball_launched == false
       launch_ball args
@@ -56,7 +58,7 @@ class Game
     if args.inputs.left && args.state.paddle.x > args.state.play_x
       args.state.paddle.x -= args.state.paddle_speed
       args.state.ball.x -= args.state.paddle_speed if args.state.ball_launched == false
-    elsif args.inputs.right && args.state.paddle.x < args.state.play_space_max_x - 104
+    elsif args.inputs.right && args.state.paddle.x < args.state.play_space_max_x - args.state.paddle.w
       args.state.paddle.x += args.state.paddle_speed
       args.state.ball.x += args.state.paddle_speed if args.state.ball_launched == false
     end
@@ -178,16 +180,12 @@ class Game
     args.state.ball.y = args.state.paddle.y + args.state.paddle.h
   end
 
-  def end_of_level args
-    if args.state.bricks_left <= 0
-      args.state.current_scene = :gameover
-    elsif args.state.current_scene == :game && args.state.bricks.none?
-      args.state.current_scene = :shop
-      args.state.wallet += args.state.level_clear_bonus
-      args.state.wallet += (args.state.wallet * args.state.interest).ceil
-      args.state.brick_health_multiplier *= 10
-      args.state.refresh_board = true
-    end
+  def end_level args
+    args.state.current_scene = :shop
+    args.state.wallet += args.state.level_clear_bonus
+    args.state.wallet += (args.state.wallet * args.state.interest).ceil
+    args.state.brick_health_multiplier *= 10
+    args.state.refresh_board = true
   end
 
   def move_ball args
