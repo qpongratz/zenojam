@@ -1,9 +1,11 @@
 require 'app/brick'
 require 'app/paddle'
 require 'app/power_up'
+require 'app/explosion'
 
 class Game
   def game args
+    args.state.explosions ||= []
     args.state.power_ups ||= []
     args.state.power_up_speed ||= 8
     args.state.paddle_width ||= 120
@@ -32,6 +34,8 @@ class Game
     args.state.play_border = { x: args.state.play_x, y: args.state.play_y, w: args.state.play_space_width, h: args.state.play_space_height, r: 255, g: 255, b: 255 }
     set_quadrant_angles args
 
+    args.state.explosions.each(&:advance)
+    args.state.explosions.reject! { |explosion| explosion.dead?}
     args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/ours/ball.png' }
 
     setup_board args if args.state.refresh_board == true
@@ -88,6 +92,13 @@ class Game
         args.state.ball_y_direction *= -1
       end
       args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
+      if args.state.explosion
+        explosion = Explosion.new(radius: 50, x: ball_center.x, y: ball_center.y, w: 100, h: 100)
+        args.geometry.find_all_intersect_rect(explosion, args.state.bricks).each do |brick|
+          brick.take_damage(args.state.ball_damage)
+        end
+        args.state.explosions << explosion
+      end
       eliminate_destroyed_bricks args
       args.state.bricks.delete(brick) if brick.health <= 0
       args.outputs.sounds << 'sounds/brick.wav'
@@ -119,6 +130,7 @@ class Game
     args.outputs.sprites << args.state.paddle
     args.outputs.sprites << args.state.ball
     args.outputs.sprites << args.state.power_ups
+    args.outputs.sprites << args.state.explosions
     args.outputs.labels << [50, 700, "$#{args.state.wallet}", 5, 1, 0, 255, 150]
   end
 

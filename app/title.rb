@@ -1,7 +1,5 @@
 class Title
   def start_game args
-    p "I am running"
-
     args.outputs.labels << {
       x: 800.from_right,
       y: 300.from_top,
