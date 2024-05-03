@@ -124,7 +124,7 @@ class Game
     if args.state.bricks_left == 0
       end_game args
     else
-      args.state.game_state = !args.state.game_state
+      args.state.current_scene = :shop
       args.state.wallet += args.state.level_clear_bonus
       args.state.wallet += (args.state.wallet * args.state.interest).ceil
       args.state.brick_health_multiplier *= 10
