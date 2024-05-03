@@ -6,7 +6,7 @@ require 'app/explosion'
 class Game
   def game args
     args.state.short_paddle ||= 0
-    args.state.paddle_shrink_chance ||= 100
+    args.state.paddle_shrink_chance ||= 0
     args.state.max_brick_health ||= 1
     args.state.explosions ||= []
     args.state.power_ups ||= []
@@ -177,11 +177,11 @@ class Game
   def setup_board args
     args.state.short_paddle = 0
     args.state.bricks = []
-    10.times do |j|
+    20.times do |j|
       (args.state.play_space_width / args.state.brick_width).to_i.times do |i|
         x = args.state.play_x + (i * args.state.brick_width)
         y = args.state.play_space_max_y - (j * args.state.brick_height) - args.state.brick_height
-        next if rand(2) == 0
+        next if rand(6) > 0
         args.state.bricks << Brick.new(x: x, y: y, w: args.state.brick_width, h: args.state.brick_height, base_health: rand(args.state.max_brick_health) + 1, health_multiplier: args.state.brick_health_multiplier)
       end
     end

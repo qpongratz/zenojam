@@ -2,6 +2,7 @@ class Shop
   def all_upgrades(args)
     @all_upgrades ||= [
       Upgrade.new(name: "Double Ball Damage", cost: 5, proc: -> { args.state.ball_damage *= 2 }),
+      Upgrade.new(name: "Double Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier *= 2 }),
       Upgrade.new(name: "Double Gold Bricks", cost: 10, proc: -> {args.state.gold_brick_chance += 10 }, uses: 1),
       Upgrade.new(name: "Paddle Size", cost: 5, proc: -> { args.state.paddle.w += 10; args.state.paddle_width += 10 }, uses: 4),
       Upgrade.new(name: "Explosion", cost: 10, proc: -> { args.state.explosion = true }, uses: 1),
