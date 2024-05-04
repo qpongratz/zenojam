@@ -286,5 +286,14 @@ class Game
       g: 255,
       b: 255
     }
+
+    args.outputs.labels << {
+      x: 250.from_right,
+      y: 450.from_top,
+      text: "Interest Gained: #{args.state.interest}",
+      r: 255,
+      g: 255,
+      b: 255
+    }
   end
 end

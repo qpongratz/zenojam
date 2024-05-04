@@ -11,6 +11,8 @@ class Shop
       Upgrade.new(name: "Paddle Speed", cost: 10, proc: -> { args.state.paddle_speed += 1 }, uses: 5),
       Upgrade.new(name: "Slow Power-Up Speed", cost: 5, proc: -> { args.state.power_up_speed -= 1 }, uses: 5),
       Upgrade.new(name: "Short Paddle Curse", cost: 100, proc: -> { args.state.paddle_shrink_chance += 10; args.state.ball_damage *=100 }, uses: 1, description_text: "But 100x damage!"),
+      Upgrade.new(name: "Interest Gained", cost: 20, proc: -> { args.state.interest += 0.1 }, uses: 3),
+
     ]
   end
 
