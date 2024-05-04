@@ -137,7 +137,7 @@ class Game
       args.state.current_scene = :shop
     end
 
-    args.outputs.labels << { x: 25, y: 45, text: "To Shop" }
+    args.outputs.labels << { x: 25, y: 45, text: "To Shop", r: 255, g: 255, b: 255}
     args.outputs.sprites << args.state.state_button
 
     args.outputs.borders << args.state.play_border

@@ -1,13 +1,26 @@
 class GameOver
+
   def game_lost args
-    args.outputs.labels << [640, 500, "Whoops, you dropped your ball.", 5, 1, 255, 255, 255]
-    args.outputs.labels << [640, 450, "Fret not. For you have a choice.", 5, 1, 255, 255, 255]
+      args.outputs.sprites << {
+      x: 50,
+      y: 120,
+      w: 1180,
+      h: 520,
+      r: 0,
+      g: 0,
+      b: 0,
+      a: 120,
+      path: "sprites/ours/black.png"
+    }
 
-    keep_playing_button ||= { x: 350, y: 325, w: 175, h: 50, path: "sprites/ours/button.png"}
-    restart_button ||= { x: 750, y: 325, w: 175, h: 50, path: "sprites/ours/button.png"}
+    args.outputs.labels << [640, 500, "Daylight is within your grasp.", 5, 1, 255, 255, 255]
+    args.outputs.labels << [640, 450, "Don't give up.", 5, 1, 255, 255, 255]
 
-    args.outputs.labels << { x: 375, y: 363, text: "Keep Bricking" }
-    args.outputs.labels << { x: 787, y: 363, text: "Begin Anew" }
+    keep_playing_button ||= { x: 350, y: 325, w: 175, h: 50, path: "sprites/controls/line-light/square.png"}
+    restart_button ||= { x: 750, y: 325, w: 175, h: 50, path: "sprites/controls/line-light/square.png"}
+
+    args.outputs.labels << { x: 375, y: 363, text: "Keep Bricking", r: 255, g: 255, b: 255}
+    args.outputs.labels << { x: 787, y: 363, text: "Begin Anew", r: 255, g: 255, b: 255}
 
     if (args.inputs.mouse.click && (args.inputs.mouse.inside_rect? keep_playing_button))
       args.state.current_scene = :game
@@ -23,12 +36,12 @@ class GameOver
   end
 
   def game_won args
-    args.outputs.labels << [600, 200, "Congratulations", 5, 1, 255, 255, 255]
+    args.outputs.labels << [600, 200, "Congratulations!", 5, 1, 255, 255, 255]
     args.outputs.labels << [600, 160, "You are able to see the night sky once again.", 5, 1, 255, 255, 255]
 
     args.state.background = { x: 0, y: 0, w: 1280, h: 720, path: "sprites/background/sky.png" }
-    restart_button ||= { x: 515, y: 50, w: 175, h: 50, path: "sprites/ours/button.png"}
-    args.outputs.labels << { x: 575, y: 85, text: "Quit" }
+    restart_button ||= { x: 515, y: 50, w: 175, h: 50, path: "sprites/controls/line-light/square.png"}
+    args.outputs.labels << { x: 575, y: 85, text: "Quit", r: 255, g: 255, b: 255}
     args.outputs.sprites << restart_button
 
     if (args.inputs.mouse.click && (args.inputs.mouse.inside_rect? restart_button))

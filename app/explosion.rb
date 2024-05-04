@@ -18,11 +18,13 @@ class Explosion
   end
 
   def path
-    "sprites/misc/explosion-#{frame}.png"
+    # "sprites/misc/explosion-#{frame}.png"
+    "sprites/explosion/explosion0#{frame}.png"
   end
 
   def dead?
-    frame > 6
+    # frame > 6
+    frame > 8
   end
 
   def frame

@@ -11,7 +11,7 @@ def tick args
 
   args.state.current_scene ||= :title
 
-  args.state.state_button ||= { x: 10, y: 10, w: 100, h: 50, path: "sprites/ours/button.png"}
+  args.state.state_button ||= { x: 10, y: 10, w: 100, h: 50, path: "sprites/controls/line-light/square.png"}
 
   args.state.background ||= { x: 0, y: 0, w: 1280, h: 720, path: "sprites/background/dungeon.png" }
   args.outputs.sprites << args.state.background

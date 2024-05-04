@@ -13,12 +13,12 @@ class Title
     }
 
     args.outputs.labels << {
-      x: 800.from_right,
+      x: 750.from_right,
       y: 500.from_top,
       r: 255,
       g: 255,
       b: 255,
-      text: "Click To Start"
+      text: "Space To Start"
     }
     args.outputs.labels << {
       x: 500.from_left,
@@ -83,7 +83,7 @@ class Title
       text: "Good Luck."
     }
 
-    if args.inputs.mouse.click
+    if args.inputs.mouse.click || args.inputs.keyboard.key_down.space || args.inputs.keyboard.key_down.up || args.inputs.keyboard.key_down.w
       args.state.current_scene = :game
       args.state.refresh_board = true
     end

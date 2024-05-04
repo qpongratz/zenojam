@@ -5,7 +5,7 @@ class Shop
       Upgrade.new(name: "Double Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier *= 2 }),
       Upgrade.new(name: "Double Gold Bricks", cost: 10, proc: -> {args.state.gold_brick_chance += 10 }, uses: 1),
       Upgrade.new(name: "Paddle Size", cost: 5, proc: -> { args.state.paddle.w += 10; args.state.paddle_width += 10 }, uses: 4),
-      Upgrade.new(name: "Explosion", cost: 25, proc: -> { args.state.explosion = true }, uses: 1),
+      Upgrade.new(name: "Explosion", cost: 5, proc: -> { args.state.explosion = true }, uses: 1),
       Upgrade.new(name: "Brick Health Levels", cost: 5, proc: -> { args.state.max_brick_health += 1 }, uses: 6),
       Upgrade.new(name: "Paddle Speed", cost: 10, proc: -> { args.state.paddle_speed += 1 }, uses: 5),
       Upgrade.new(name: "Slow Power-Up Speed", cost: 5, proc: -> { args.state.power_up_speed -= 1 }, uses: 5),
@@ -20,7 +20,7 @@ class Shop
 
     if args.state.buttons.empty?
       args.state.upgrades.each_with_index do |upgrade, index|
-        args.state.buttons << Button.new(x: (100 + 250 * index), y: 100, w: 200, h: 200, upgrade: upgrade)
+        args.state.buttons << Button.new(x: (220 + 300 * index), y: 80, w: 250, h: 180, upgrade: upgrade)
       end
     end
 
@@ -38,7 +38,7 @@ class Shop
       end
     end
 
-    args.outputs.labels << { x: 25, y: 45, text: "To Game" }
+    args.outputs.labels << { x: 25, y: 45, text: "To Game", r: 255, g: 255, b: 255 }
 
     if (args.inputs.mouse.click && (args.inputs.mouse.inside_rect? args.state.state_button))
       args.state.current_scene = :game
@@ -108,15 +108,15 @@ class Button
 
   def labels
     [
-      { x: (x + 5), y: (y + h - 20), h: h, w: w, text: upgrade.name, r: 0, g: 0, b: 0},
-      { x: (x + 5), y: (y + h - 40), h: h, w: w, text: upgrade.description_text, r: 0, g: 0, b: 0},
-      { x: (x + 5), y: (y + h - 60), h: h, w: w, text: upgrade.cost_text, r: 0, g: 0, b: 0},
-      { x: (x + 5), y: (y + h - 80), h: h, w: w, text: upgrade.uses_text, r: 0, g: 0, b: 0},
+      { x: (x + 10), y: (y + h - 20), h: h, w: w, text: upgrade.name, size_enum: 0,  r: 255, g: 255, b: 255},
+      { x: (x + 10), y: (y + h - 40), h: h, w: w, text: upgrade.description_text, r: 255, g: 255, b: 255},
+      { x: (x + 10), y: (y + h - 60), h: h, w: w, text: upgrade.cost_text, r: 255, g: 255, b: 255},
+      { x: (x + 10), y: (y + h - 80), h: h, w: w, text: upgrade.uses_text, r: 255, g: 255, b: 255},
     ]
   end
 
   def path
-    'sprites/ours/button.png'
+    'sprites/controls/line-light/square.png'
   end
 
   def primitive_marker
