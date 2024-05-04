@@ -7,7 +7,7 @@ class Game
   def game args
     args.state.short_paddle ||= 0
     args.state.paddle_shrink_chance ||= 0
-    args.state.max_brick_health ||= 1
+    args.state.max_brick_health ||= 7
     args.state.explosions ||= []
     args.state.explosion_radius ||= 50
     args.state.power_ups ||= []

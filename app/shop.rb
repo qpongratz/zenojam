@@ -5,7 +5,7 @@ class Shop
       Upgrade.new(name: "Double Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier *= 2 }),
       Upgrade.new(name: "Double Gold Bricks", cost: 10, proc: -> {args.state.gold_brick_chance += 10 }, uses: 1),
       Upgrade.new(name: "Paddle Size", cost: 5, proc: -> { args.state.paddle.w += 10; args.state.paddle_width += 10 }, uses: 4),
-      Upgrade.new(name: "Explosion", cost: 25, proc: -> { args.state.explosion = true }, uses: 1),
+      Upgrade.new(name: "Explosion", cost: 5, proc: -> { args.state.explosion = true }, uses: 1),
       Upgrade.new(name: "Explosion Radius", cost: 10, proc: -> { args.state.explosion_radius += 25 }, uses: 3),
       Upgrade.new(name: "Brick Health Levels", cost: 5, proc: -> { args.state.max_brick_health += 1 }, uses: 6),
       Upgrade.new(name: "Paddle Speed", cost: 10, proc: -> { args.state.paddle_speed += 1 }, uses: 5),
@@ -15,11 +15,15 @@ class Shop
   end
 
   def menu args
+    args.state.upgrades ||= all_upgrades(args).reject{ |x| x.name == "Explosion Radius" unless args.state.explosion }.shuffle.take(3)
     args.state.upgrades ||= all_upgrades(args).reject{ |x| x.uses == 0 }.shuffle.take(3)
 
     args.state.buttons ||= []
 
+
     if args.state.buttons.empty?
+        args.gtk.log @all_upgrades
+
       args.state.upgrades.each_with_index do |upgrade, index|
         args.state.buttons << Button.new(x: (220 + 300 * index), y: 80, w: 250, h: 180, upgrade: upgrade)
       end
