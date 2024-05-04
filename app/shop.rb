@@ -25,8 +25,6 @@ class Shop
 
 
     if args.state.buttons.empty?
-        args.gtk.log @all_upgrades
-
       args.state.upgrades.each_with_index do |upgrade, index|
         args.state.buttons << Button.new(x: (220 + 300 * index), y: 80, w: 250, h: 180, upgrade: upgrade)
       end

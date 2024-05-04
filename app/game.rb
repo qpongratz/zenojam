@@ -101,12 +101,14 @@ class Game
       test_angle = brick_center.angle_to ball_center
       target_x = args.state.ball_x_direction.positive? ? 180 : 0
       target_y = args.state.ball_y_direction.positive? ? 270 : 90
+        args.gtk.log args.state.brick.health
       if Geometry.angle_within_range? test_angle, target_x, args.state.vertical_quadrant_angle
-        args.state.ball_x_direction *= -1 unless args.state.ball_damage > args.state.max_brick_health * 2
+        args.state.ball_x_direction *= -1 unless brick.health <= 1 && args.state.ball_damage >= args.state.brick_health_multiplier * 4
       end
 
+
       if Geometry.angle_within_range? test_angle, target_y, args.state.horizontal_quadrant_angle
-        args.state.ball_y_direction *= -1 unless args.state.ball_damage > args.state.max_brick_health * 2
+        args.state.ball_y_direction *= -1 unless brick.health <= 1 && args.state.ball_damage >= args.state.brick_health_multiplier * 4
       end
       args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
       if args.state.explosion
@@ -126,7 +128,7 @@ class Game
 
       eliminate_destroyed_bricks args
       args.state.bricks.delete(brick) if brick.health <= 0
-      args.audio[:effect] = {
+      args.audio[:brick] = {
         input: 'sounds/brick.wav',
         looping: false,
         paused: false
@@ -270,6 +272,15 @@ class Game
       x: 250.from_right,
       y: 370.from_top,
       text: "Gold Bricks: #{args.state.gold_brick_chance}",
+      r: 255,
+      g: 255,
+      b: 255
+    }
+
+    args.outputs.labels << {
+      x: 250.from_right,
+      y: 410.from_top,
+      text: "Cleave Bricks: #{args.state.ball_damage >= args.state.brick_health_multiplier * 4 ? 'On' : 'Off'}",
       r: 255,
       g: 255,
       b: 255
