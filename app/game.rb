@@ -7,7 +7,7 @@ class Game
   def game args
     args.state.short_paddle ||= 0
     args.state.paddle_shrink_chance ||= 0
-    args.state.max_brick_health ||= 7
+    args.state.max_brick_health ||= 2
     args.state.explosions ||= []
     args.state.explosion_radius ||= 50
     args.state.power_ups ||= []
@@ -74,7 +74,12 @@ class Game
 
     if args.state.ball.intersect_rect? args.state.paddle
       modify_ball_direction args
-      args.outputs.sounds << 'sounds/bloop.wav'
+
+      args.audio[:bloop] = {
+        input: 'sounds/bloop.wav',
+        looping: false,
+        paused: false
+      }
       # Bloop by andersmmg -- https://freesound.org/s/523423/ -- License: Attribution 4.0
     end
 
@@ -106,7 +111,11 @@ class Game
       args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
       if args.state.explosion
         explosion = Explosion.new(radius: args.state.explosion_radius, x: ball_center.x, y: ball_center.y, w: 100, h: 100)
-        args.outputs.sounds << 'sounds/explosion.wav'
+        args.audio[:explosion] = {
+          input: 'sounds/explosion.wav',
+          looping: false,
+          paused: false
+        }
         # 32_EXPLOSION_FINAL by Jomprate -- https://freesound.org/people/Jomprate/sounds/409538/ -- License: Attribution 4.0
         args.geometry.find_all_intersect_rect(explosion, args.state.bricks).each do |new_brick|
           next if new_brick == brick
@@ -117,7 +126,11 @@ class Game
 
       eliminate_destroyed_bricks args
       args.state.bricks.delete(brick) if brick.health <= 0
-      args.outputs.sounds << 'sounds/brick.wav'
+      args.audio[:effect] = {
+        input: 'sounds/brick.wav',
+        looping: false,
+        paused: false
+      }
     end
 
 
