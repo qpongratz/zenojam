@@ -24,7 +24,7 @@ class Game
     args.state.brick_height ||= 20
     args.state.brick_health_multiplier ||= 1
     args.state.paddle ||= Paddle.new(x: 640, y: 100, w: args.state.paddle_width, h: 10)
-    args.state.wallet ||= 10
+    args.state.wallet ||= 100
     args.state.interest ||= 0.1
     args.state.gold_brick_chance ||= 10
     args.state.level_clear_bonus ||= 5

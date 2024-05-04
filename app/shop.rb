@@ -5,8 +5,8 @@ class Shop
       Upgrade.new(name: "Double Brick Health Mult", cost: 5, proc: -> { args.state.brick_health_multiplier *= 2 }),
       Upgrade.new(name: "Double Gold Bricks", cost: 10, proc: -> {args.state.gold_brick_chance += 10 }, uses: 1),
       Upgrade.new(name: "Paddle Size", cost: 5, proc: -> { args.state.paddle.w += 10; args.state.paddle_width += 10 }, uses: 4),
-      Upgrade.new(name: "Explosion", cost: 5, proc: -> { args.state.explosion = true }, uses: 1),
-      Upgrade.new(name: "Explosion Radius", cost: 10, proc: -> { args.state.explosion_radius += 25 }, uses: 3),
+      Upgrade.new(name: "Explosion", cost: 100, proc: -> { args.state.explosion = true }, uses: 1),
+      Upgrade.new(name: "Explosion Radius", cost: 20, proc: -> { args.state.explosion_radius += 25 }, uses: 3),
       Upgrade.new(name: "Brick Health Levels", cost: 5, proc: -> { args.state.max_brick_health += 1 }, uses: 6),
       Upgrade.new(name: "Paddle Speed", cost: 10, proc: -> { args.state.paddle_speed += 1 }, uses: 5),
       Upgrade.new(name: "Slow Power-Up Speed", cost: 5, proc: -> { args.state.power_up_speed -= 1 }, uses: 5),
@@ -15,8 +15,11 @@ class Shop
   end
 
   def menu args
-    args.state.upgrades ||= all_upgrades(args).reject{ |x| x.name == "Explosion Radius" unless args.state.explosion }.shuffle.take(3)
-    args.state.upgrades ||= all_upgrades(args).reject{ |x| x.uses == 0 }.shuffle.take(3)
+    args.state.upgrades ||= all_upgrades(args).select do |upgrade|
+      next if upgrade.name == "Explosion Radius" && !args.state.explosion
+      next if upgrade.uses == 0
+      upgrade
+    end.shuffle.take(3)
 
     args.state.buttons ||= []
 

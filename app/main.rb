@@ -46,7 +46,7 @@ def tick args
   end
 
 
-  if (args.inputs.keyboard.key_down.enter || args.inputs.keyboard.key_down.escape)
+  if args.inputs.keyboard.key_down.escape
     args.state.current_scene == :game ? args.state.current_scene = :paused : args.state.current_scene = :game
   end
 
