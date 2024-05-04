@@ -46,13 +46,21 @@ class Title
       path: "sprites/kenny/keyboard/keyboard_m_outline.png"
     }
 
-    args.outputs.labels << {
+    args.outputs.sprites << {
       x: 750.from_right,
+      y: 178,
+      w: 64,
+      h: 64,
+      path: "sprites/kenny/keyboard/keyboard_space_outline.png"
+    }
+
+    args.outputs.labels << {
+      x: 680.from_right,
       y: 500.from_top,
       r: 255,
       g: 255,
       b: 255,
-      text: "Space To Start"
+      text: "To Start"
     }
     args.outputs.labels << {
       x: 500.from_left,
@@ -72,13 +80,54 @@ class Title
       text: "You have been imprisoned in a dungeon and you must break 1 billion bricks to escape."
     }
 
+    args.outputs.sprites << {
+      x: 143.from_left,
+      y: 228.from_top,
+      w: 36,
+      h: 36,
+      path: "sprites/kenny/keyboard/keyboard_arrows_horizontal_outline.png"
+    }
+
+    args.outputs.sprites << {
+      x: 218.from_left,
+      y: 228.from_top,
+      w: 32,
+      h: 32,
+      path: "sprites/kenny/keyboard/keyboard_a_outline.png"
+    }
+
+    args.outputs.sprites << {
+      x: 298.from_left,
+      y: 228.from_top,
+      w: 32,
+      h: 32,
+      path: "sprites/kenny/keyboard/keyboard_d_outline.png"
+    }
+
+
     args.outputs.labels << {
       x: 100.from_left,
       y: 200.from_top,
       r: 255,
       g: 255,
       b: 255,
-      text: "Use Left and Right or A and D keys to move paddle left and right."
+      text: "Use      or     and     keys to move paddle left and right."
+    }
+
+    args.outputs.sprites << {
+      w: 32,
+      h: 32,
+      x: 227.from_left,
+      y: 277.from_top,
+      path: "sprites/kenny/keyboard/keyboard_w_outline.png"
+    }
+
+    args.outputs.sprites << {
+      w: 36,
+      h: 36,
+      x: 158.from_left,
+      y: 277.from_top,
+      path: "sprites/kenny/keyboard/keyboard_arrows_up_outline.png"
     }
 
     args.outputs.labels << {
@@ -87,7 +136,7 @@ class Title
       r: 255,
       g: 255,
       b: 255,
-      text: "Press Up or W to launch ball from paddle."
+      text: "Press     or     to launch ball from paddle."
     }
 
     args.outputs.labels << {
