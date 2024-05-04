@@ -50,7 +50,7 @@ class Shop
     args.outputs.labels << [640, 700, "Ball Speed: #{args.state.ball_speed}", 5, 1, 255, 255, 255]
     args.outputs.labels << [640, 650, "Brick Health Mult: #{args.state.brick_health_multiplier}", 5, 1, 255, 255, 255]
     args.outputs.labels << [640, 600, "Ball Damage: #{args.state.ball_damage}", 5, 1, 255, 255, 255]
-    args.outputs.labels << [640, 550, "Gold Bricks: #{args.state.gold_bricks}", 5, 1, 255, 255, 255]
+    args.outputs.labels << [640, 550, "Gold Bricks: #{args.state.gold_brick_chance}", 5, 1, 255, 255, 255]
     args.outputs.labels << [50, 700, "$#{args.state.wallet}", 5, 1, 0, 255, 150]
   end
 end

@@ -36,6 +36,7 @@ class Game
     args.state.play_space_max_y ||= args.state.play_y + args.state.play_space_height
     args.state.play_border = { x: args.state.play_x, y: args.state.play_y, w: args.state.play_space_width, h: args.state.play_space_height, r: 255, g: 255, b: 255 }
     set_quadrant_angles args
+    game_stats args
 
     args.state.explosions.each(&:advance)
     args.state.explosions.reject! { |explosion| explosion.dead?}
@@ -73,7 +74,6 @@ class Game
     if args.state.ball.intersect_rect? args.state.paddle
       modify_ball_direction args
       args.outputs.sounds << 'sounds/bloop.wav'
-      # We'll need to credit this if we leave it in the game
       # Bloop by andersmmg -- https://freesound.org/s/523423/ -- License: Attribution 4.0
     end
 
@@ -87,6 +87,7 @@ class Game
       end
     end
 
+
     brick = args.geometry.find_intersect_rect args.state.ball, args.state.bricks
     if brick
       brick_center = { x: brick.x + (brick.w / 2), y: brick.y + (brick.h / 2) }
@@ -95,17 +96,17 @@ class Game
       target_x = args.state.ball_x_direction.positive? ? 180 : 0
       target_y = args.state.ball_y_direction.positive? ? 270 : 90
       if Geometry.angle_within_range? test_angle, target_x, args.state.vertical_quadrant_angle
-        args.state.ball_x_direction *= -1
+        args.state.ball_x_direction *= -1 unless args.state.ball_damage > args.state.max_brick_health * 2
       end
 
       if Geometry.angle_within_range? test_angle, target_y, args.state.horizontal_quadrant_angle
-        args.state.ball_y_direction *= -1
+        args.state.ball_y_direction *= -1 unless args.state.ball_damage > args.state.max_brick_health * 2
       end
       args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
       if args.state.explosion
         explosion = Explosion.new(radius: 50, x: ball_center.x, y: ball_center.y, w: 100, h: 100)
         args.outputs.sounds << 'sounds/explosion.wav'
-        #https://freesound.org/people/Jomprate/sounds/409538/
+        # 32_EXPLOSION_FINAL by Jomprate -- https://freesound.org/people/Jomprate/sounds/409538/ -- License: Attribution 4.0
         args.geometry.find_all_intersect_rect(explosion, args.state.bricks).each do |new_brick|
           next if new_brick == brick
           new_brick.take_damage(args.state.ball_damage)
@@ -221,5 +222,43 @@ class Game
     pos_x = (ball_center_x - paddle_center_x) / (args.state.paddle.w / 2)
     args.state.ball_x_direction = args.state.max_ball_direction * pos_x * 0.75
     args.state.ball_y_direction = Math.sqrt(args.state.max_ball_direction ** 2 - args.state.ball_x_direction ** 2)
+  end
+
+  def game_stats args
+    args.outputs.labels << {
+      x: 250.from_right,
+      y: 250.from_top,
+      text: "Brick Health Mult: #{args.state.brick_health_multiplier}",
+      r: 255,
+      g: 255,
+      b: 255
+    }
+
+    args.outputs.labels << {
+      x: 250.from_right,
+      y: 290.from_top,
+      text: "Ball Damage: #{args.state.ball_damage}",
+      r: 255,
+      g: 255,
+      b: 255
+    }
+
+    args.outputs.labels << {
+      x: 250.from_right,
+      y: 330.from_top,
+      text: "Ball Speed: #{args.state.ball_speed}",
+      r: 255,
+      g: 255,
+      b: 255
+    }
+
+    args.outputs.labels << {
+      x: 250.from_right,
+      y: 370.from_top,
+      text: "Gold Bricks: #{args.state.gold_brick_chance}",
+      r: 255,
+      g: 255,
+      b: 255
+    }
   end
 end

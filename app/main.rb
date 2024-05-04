@@ -32,14 +32,48 @@ def tick args
     end
   end
 
+
   args.outputs.labels << {
     x: 60.from_right,
-    y: 30.from_top,
+    y: 75.from_top,
     r: 255,
     g: 255,
     b: 255,
     text: "#{args.gtk.current_framerate.to_sf} "
   }
+
+  args.state.mute.border ||= { x: 50.from_right, y: 50.from_top, w: 100, h: 50, r: 255, g: 255, b: 255, a: 0 }
+
+  if args.state.tick_count == 1
+    args.audio[:music] = {
+      input: 'sounds/ours/title.mp3',
+      gain: 0.75,
+      looping: true,
+      paused: false
+    }
+    elsif args.state.tick_count > 2
+
+    mute = {
+      x: 50.from_right,
+      y: 50.from_top,
+      h: 32,
+      w: 32,
+      path: args.audio[:music].paused == true ? 'sprites/controls/line-light/mute.png' : 'sprites/controls/line-light/unmute.png'
+    }
+
+    args.outputs.sprites << mute
+    args.outputs.borders << args.state.mute.border
+
+    if (args.inputs.mouse.click) &&
+      (args.inputs.mouse.point.inside_rect? args.state.mute.border)
+      args.audio[:music].paused == true ? args.audio[:music].paused = false : args.audio[:music].paused = true
+    end
+  end
+
+
+
+
+
 end
 
 $gtk.reset
