@@ -77,7 +77,7 @@ def tick args
       y: 50.from_top,
       h: 32,
       w: 32,
-      path: args.audio[:music].paused == true ? 'sprites/controls/line-light/mute.png' : 'sprites/controls/line-light/unmute.png'
+      path: args.state.mute_sound ?  'sprites/controls/line-light/mute.png' : 'sprites/controls/line-light/unmute.png'
     }
 
     args.outputs.sprites << mute
@@ -85,7 +85,8 @@ def tick args
 
     if (args.inputs.mouse.click) &&
       (args.inputs.mouse.point.inside_rect? args.state.mute.border)
-      args.audio[:music].paused == true ? args.audio[:music].paused = false : args.audio[:music].paused = true
+        args.audio.volume = args.state.mute_sound ? 1 : 0
+      args.state.mute_sound = !args.state.mute_sound
     end
   end
 end

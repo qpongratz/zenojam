@@ -5,6 +5,7 @@ require 'app/explosion'
 
 class Game
   def game args
+    args.state.mute_sound ||= false
     args.state.short_paddle ||= 0
     args.state.paddle_shrink_chance ||= 0
     args.state.max_brick_health ||= 2

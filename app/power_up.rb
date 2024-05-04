@@ -28,7 +28,12 @@ class PowerUp
     case @type
     when :gold
       args.state.wallet += 10
-      args.outputs.sounds << 'sounds/coin.wav'
+
+      args.audio[:coin] = {
+        input: 'sounds/coin.wav',
+        looping: false,
+        paused: false
+      }
       # https://freesound.org/people/Cpfcfan10/sounds/625547/
     when :short_paddle
       args.state.short_paddle += 200
