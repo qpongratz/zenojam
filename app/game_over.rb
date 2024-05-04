@@ -53,7 +53,8 @@ class GameOver
     args.state.bricks_left = 1000000000
     args.state.wallet = 10
     args.state.ball_speed = 5
-    args.state.brick_health_multiplier = 1
+    args.state.max_brick_health ||= 2
+    args.state.brick_health_multiplier ||= 1
     args.state.ball_damage = 1
     args.state.bricks = []
     args.state.explosion = false
