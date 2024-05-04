@@ -69,11 +69,6 @@ def tick args
       args.audio[:music].paused == true ? args.audio[:music].paused = false : args.audio[:music].paused = true
     end
   end
-
-
-
-
-
 end
 
 $gtk.reset
