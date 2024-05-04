@@ -16,8 +16,8 @@ class GameOver
     args.outputs.labels << [640, 500, "Daylight is within your grasp.", 5, 1, 255, 255, 255]
     args.outputs.labels << [640, 450, "Don't give up.", 5, 1, 255, 255, 255]
 
-    keep_playing_button ||= { x: 350, y: 325, w: 175, h: 50, path: "sprites/controls/line-light/square.png"}
-    restart_button ||= { x: 750, y: 325, w: 175, h: 50, path: "sprites/controls/line-light/square.png"}
+    keep_playing_button ||= { x: 350, y: 325, w: 175, h: 50, path: "sprites/kenny/controls/line-light/square.png"}
+    restart_button ||= { x: 750, y: 325, w: 175, h: 50, path: "sprites/kenny/controls/line-light/square.png"}
 
     args.outputs.labels << { x: 375, y: 363, text: "Keep Bricking", r: 255, g: 255, b: 255}
     args.outputs.labels << { x: 787, y: 363, text: "Begin Anew", r: 255, g: 255, b: 255}
@@ -40,7 +40,7 @@ class GameOver
     args.outputs.labels << [600, 160, "You are able to see the night sky once again.", 5, 1, 255, 255, 255]
 
     args.state.background = { x: 0, y: 0, w: 1280, h: 720, path: "sprites/background/sky.png" }
-    restart_button ||= { x: 515, y: 50, w: 175, h: 50, path: "sprites/controls/line-light/square.png"}
+    restart_button ||= { x: 515, y: 50, w: 175, h: 50, path: "sprites/kenny/controls/line-light/square.png"}
     args.outputs.labels << { x: 575, y: 85, text: "Quit", r: 255, g: 255, b: 255}
     args.outputs.sprites << restart_button
 

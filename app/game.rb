@@ -102,7 +102,6 @@ class Game
       test_angle = brick_center.angle_to ball_center
       target_x = args.state.ball_x_direction.positive? ? 180 : 0
       target_y = args.state.ball_y_direction.positive? ? 270 : 90
-        args.gtk.log args.state.brick.health
       if Geometry.angle_within_range? test_angle, target_x, args.state.vertical_quadrant_angle
         args.state.ball_x_direction *= -1 unless brick.health <= 1 && args.state.ball_damage >= args.state.brick_health_multiplier * 4
       end

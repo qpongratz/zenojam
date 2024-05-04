@@ -11,7 +11,7 @@ def tick args
 
   args.state.current_scene ||= :title
 
-  args.state.state_button ||= { x: 10, y: 10, w: 100, h: 50, path: "sprites/controls/line-light/square.png"}
+  args.state.state_button ||= { x: 10, y: 10, w: 100, h: 50, path: "sprites/kenny/controls/line-light/square.png"}
 
   args.state.background ||= { x: 0, y: 0, w: 1280, h: 720, path: "sprites/background/dungeon.png" }
   args.outputs.sprites << args.state.background
@@ -31,7 +31,15 @@ def tick args
       @game_over.game_lost args
     end
   when :paused
-    args.outputs.labels << [640, 360, "Paused", 5, 1, 255, 255, 255]
+    args.outputs.labels << [640, 300.from_top, "Paused", 5, 1, 255, 255, 255]
+
+    if (args.inputs.mouse.click && (args.inputs.mouse.inside_rect? args.state.state_button))
+      args.state.current_scene = :shop
+    end
+
+    args.outputs.sprites << args.state.state_button
+
+    args.outputs.labels << { x: 25, y: 45, text: "To Shop", r: 255, g: 255, b: 255}
     args.outputs.sprites << {
       x: 50,
       y: 120,
@@ -77,14 +85,14 @@ def tick args
       y: 50.from_top,
       h: 32,
       w: 32,
-      path: args.state.mute_sound ?  'sprites/controls/line-light/mute.png' : 'sprites/controls/line-light/unmute.png'
+      path: args.state.mute_sound ?  'sprites/kenny/controls/line-light/mute.png' : 'sprites/kenny/controls/line-light/unmute.png'
     }
 
     args.outputs.sprites << mute
     args.outputs.borders << args.state.mute.border
 
     if (args.inputs.mouse.click) &&
-      (args.inputs.mouse.point.inside_rect? args.state.mute.border)
+      (args.inputs.mouse.point.inside_rect? args.state.mute.border) || args.inputs.keyboard.key_down.m
         args.audio.volume = args.state.mute_sound ? 1 : 0
       args.state.mute_sound = !args.state.mute_sound
     end

@@ -124,7 +124,7 @@ class Button
   end
 
   def path
-    'sprites/controls/line-light/square.png'
+    'sprites/kenny/controls/line-light/square.png'
   end
 
   def primitive_marker

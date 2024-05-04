@@ -13,6 +13,40 @@ class Title
     }
 
     args.outputs.labels << {
+      x: 140.from_left,
+      y: 197,
+      r: 255,
+      g: 255,
+      b: 255,
+      text: "- Pause"
+    }
+
+    args.outputs.sprites << {
+      x: 100.from_left,
+      y: 170,
+      w: 32,
+      h: 32,
+      path: "sprites/kenny/keyboard/keyboard_escape_outline.png"
+    }
+
+    args.outputs.labels << {
+      x: 140.from_left,
+      y: 157,
+      r: 255,
+      g: 255,
+      b: 255,
+      text: "- Mute"
+    }
+
+    args.outputs.sprites << {
+      x: 100.from_left,
+      y: 130,
+      w: 32,
+      h: 32,
+      path: "sprites/kenny/keyboard/keyboard_m_outline.png"
+    }
+
+    args.outputs.labels << {
       x: 750.from_right,
       y: 500.from_top,
       r: 255,
@@ -83,7 +117,7 @@ class Title
       text: "Good Luck."
     }
 
-    if args.inputs.mouse.click || args.inputs.keyboard.key_down.space || args.inputs.keyboard.key_down.up || args.inputs.keyboard.key_down.w
+    if args.inputs.mouse.click || args.inputs.keyboard.key_down.space || args.inputs.keyboard.key_down.up || args.inputs.keyboard.key_down.w || args.inputs.keyboard.key_down.escape
       args.state.current_scene = :game
       args.state.refresh_board = true
     end
