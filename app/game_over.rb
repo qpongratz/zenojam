@@ -56,5 +56,9 @@ class GameOver
     args.state.brick_health_multiplier = 1
     args.state.ball_damage = 1
     args.state.bricks = []
+    args.state.explosion = false
+    args.state.gold_brick_chance ||= 10
+    args.state.paddle_width ||= 120
+    args.state.paddle_speed ||= 10
   end
 end

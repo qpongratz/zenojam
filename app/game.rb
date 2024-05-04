@@ -9,6 +9,7 @@ class Game
     args.state.paddle_shrink_chance ||= 0
     args.state.max_brick_health ||= 1
     args.state.explosions ||= []
+    args.state.explosion_radius ||= 50
     args.state.power_ups ||= []
     args.state.power_up_speed ||= 8
     args.state.paddle_width ||= 120
@@ -104,7 +105,7 @@ class Game
       end
       args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
       if args.state.explosion
-        explosion = Explosion.new(radius: 50, x: ball_center.x, y: ball_center.y, w: 100, h: 100)
+        explosion = Explosion.new(radius: args.state.explosion_radius, x: ball_center.x, y: ball_center.y, w: 100, h: 100)
         args.outputs.sounds << 'sounds/explosion.wav'
         # 32_EXPLOSION_FINAL by Jomprate -- https://freesound.org/people/Jomprate/sounds/409538/ -- License: Attribution 4.0
         args.geometry.find_all_intersect_rect(explosion, args.state.bricks).each do |new_brick|

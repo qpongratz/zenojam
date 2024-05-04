@@ -30,6 +30,24 @@ def tick args
     else
       @game_over.game_lost args
     end
+  when :paused
+    args.outputs.labels << [640, 360, "Paused", 5, 1, 255, 255, 255]
+    args.outputs.sprites << {
+      x: 50,
+      y: 120,
+      w: 1180,
+      h: 520,
+      r: 0,
+      g: 0,
+      b: 0,
+      a: 120,
+      path: "sprites/ours/black.png"
+    }
+  end
+
+
+  if (args.inputs.keyboard.key_down.enter || args.inputs.keyboard.key_down.escape)
+    args.state.current_scene == :game ? args.state.current_scene = :paused : args.state.current_scene = :game
   end
 
 
@@ -41,6 +59,7 @@ def tick args
     b: 255,
     text: "#{args.gtk.current_framerate.to_sf} "
   }
+
 
   args.state.mute.border ||= { x: 50.from_right, y: 50.from_top, w: 100, h: 50, r: 255, g: 255, b: 255, a: 0 }
 
