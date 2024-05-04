@@ -4,7 +4,7 @@ devtitle=Quentin & Jason
 gameid=billion-brick-breaker
 gametitle=Billion Brick Breaker
 version=0.1
-# icon=metadata/icon.png
+icon=metadata/icon.png
 
 # === Flags available at all licensing tiers ===
 
