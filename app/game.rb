@@ -39,6 +39,7 @@ class Game
 
     args.state.explosions.each(&:advance)
     args.state.explosions.reject! { |explosion| explosion.dead?}
+
     args.state.ball ||= { x: 640, y: 360, w: 10, h: 10, path: 'sprites/ours/ball.png' }
 
     setup_board args if args.state.refresh_board == true
@@ -103,16 +104,20 @@ class Game
       args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
       if args.state.explosion
         explosion = Explosion.new(radius: 50, x: ball_center.x, y: ball_center.y, w: 100, h: 100)
+        args.outputs.sounds << 'sounds/explosion.wav'
+        #https://freesound.org/people/Jomprate/sounds/409538/
         args.geometry.find_all_intersect_rect(explosion, args.state.bricks).each do |new_brick|
           next if new_brick == brick
           new_brick.take_damage(args.state.ball_damage)
         end
         args.state.explosions << explosion
       end
+
       eliminate_destroyed_bricks args
       args.state.bricks.delete(brick) if brick.health <= 0
       args.outputs.sounds << 'sounds/brick.wav'
     end
+
 
     calculate_new_ball_position args if args.state.ball_launched
     move_ball args if args.state.ball_launched
