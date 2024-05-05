@@ -2,6 +2,6 @@ devid=lagarathan
 devtitle=Quentin & Jason
 gameid=billion-brick-breaker
 gametitle=Billion Brick Breaker
-version=0.1
+version=0.2
 icon=metadata/icon.png
 scale_quality=1
