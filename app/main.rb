@@ -73,7 +73,7 @@ def tick args
 
   if args.state.tick_count == 1
     args.audio[:music] = {
-      input: 'sounds/ours/title.mp3',
+      input: 'sounds/ours/dungeon.wav',
       gain: 0.75,
       looping: true,
       paused: false
