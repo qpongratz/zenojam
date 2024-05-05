@@ -102,6 +102,7 @@ class Game
       test_angle = brick_center.angle_to ball_center
       target_x = args.state.ball_x_direction.positive? ? 180 : 0
       target_y = args.state.ball_y_direction.positive? ? 270 : 90
+      args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
       if Geometry.angle_within_range? test_angle, target_x, args.state.vertical_quadrant_angle
         args.state.ball_x_direction *= -1 unless brick.health <= 1 && args.state.ball_damage >= args.state.brick_health_multiplier * 4
       end
@@ -110,7 +111,6 @@ class Game
       if Geometry.angle_within_range? test_angle, target_y, args.state.horizontal_quadrant_angle
         args.state.ball_y_direction *= -1 unless brick.health <= 1 && args.state.ball_damage >= args.state.brick_health_multiplier * 4
       end
-      args.state.bricks_left -= brick.take_damage(args.state.ball_damage)
       if args.state.explosion
         explosion = Explosion.new(radius: args.state.explosion_radius, x: ball_center.x, y: ball_center.y, w: 100, h: 100)
         args.audio[:explosion] = {
